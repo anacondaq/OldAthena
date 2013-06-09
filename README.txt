@@ -5,7 +5,7 @@
  | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
   \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
 
-
+--------------------------------------------------------------------
 	Modificações do emulador brAthena, rAthena e eAthena para o suporte
 das versões Pré-Heritage (Episódio até Umbala e Niflheim) de Ragnarök Online,
 sem abrir mão das novas funcionabilidades atuais do jogo (tumbas de mvps, 
