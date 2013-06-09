@@ -1,0 +1,1316 @@
+//===== Cronus Script ======================================== 
+//= Script Sacerdote
+//===== Por: =================================================
+//= Lupus
+//===== Versão Atual: ======================================== 
+//= 1.3
+//===== Descrição: =========================================== 
+//= Muda a classe para Sacerdote
+//===== Changelog: =========================================== 
+//= 1.0 Iniciado o Npc [Lupus]
+//= 1.1 Traduzido [Viv]
+//= 1.2 Organizado o Npc [Kamper]
+//= 1.3 Traduzido umas partes que faltava [Kamper]
+//= 1.4 Corrigido alguns erros de português [Kamper]
+//============================================================
+prt_church.gat,16,41,4	script	Padre Thomas	60,{
+	callfunc "F_BlockHigh",28,"Acolyte High",32,"High Priest","Padre Thomas";
+
+	mes "[Padre Thomas]";
+	if (BaseJob == Job_Acolyte) goto L_Start;
+	callfunc "Pri_check";
+	close;
+
+
+L_Start:
+	if (PRIEST_Q == 1) goto L_Test1;
+	if (PRIEST_Q == 2) goto L_Test2;
+	if (PRIEST_Q == 3) goto L_Test3;
+	if (PRIEST_Q == 4) goto L_Change;
+	mes "Deus te abençoe, criança. O que o traz aqui?";
+	next;
+	menu "Quero me tornar um Sacerdote.",M_2a, "Diga-me sobre os Sacerdotes.",M_2b, "Só queria saber o que você estava fazendo.",M_2End;
+
+	M_2a:
+		mes "[Padre Thomas]";
+		mes "Oh... então você quer se tornar um Sacerdote? Deus lhe abençoe por sua determinação.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Eu sou o Padre Thomas. Eu sou responsável por proteger Prontera do espíritos malígnos que infestam Rune Midgard.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Por favor, preencha esse formulário para eu poder avaliar suas qualificações para se tornar um Sacerdote.";
+		next;
+		mes "(você preencheu o formulário e o devolveu)";
+		next;
+		mes "[Padre Thomas]";
+		if (JobLevel < 40) goto sL_LowLvl;
+		if (JobLevel == 50) goto sL_HighLvl;
+		mes "Ah, muito bom " + strcharinfo(0) + ". Deixe-me lhe contar agora sobre as tarefas que você terá que completar para se tornar um Sacerdote.";
+		next;
+		mes "[Padre Thomas]";
+		mes "A primeira tarefa será encontrar e falar com 3 Clérigos muito sábios. Eles estão em muitas partes de Rune Midgard.";
+		next;
+		mes "[Padre Thomas]";
+		mes "A segunda tarefa consiste em 3 missões. Na primeira missão você deve enfrentar um morto-vivo.";
+		mes "A segunda missão vai testar sua capacidade de resistir a tentação e evitar a corrupção. A terceira missão você deve descobrir sozinho.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Após terminar as 2 tarefas, haverá um teste final com a Irmã Cecile. Passe e você poderá se tornar um Sacerdote.";
+		next;
+		mes "[Padre Thomas]";
+		set JBLVL, 40;
+		goto L_Test1;
+
+		sL_LowLvl:
+			mes "Sinto muito, mas você ainda não pode se tornar um Sacerdote. Você precisa ter no minimo nível 40 de classe.";
+			next;
+			mes "[Padre Thomas]";
+			mes "Por favor, fortaleça sua fé em Deus cometendo mais atos bons.";
+			mes "Espero que o tempo esteja certo, você voltará... Eu lhe esperarei aqui.";
+			close;
+
+		sL_HighLvl:
+			mes "Nossa, você já está no nivel 50 de classe. Estou impressionado com sua dedicação e trabalho duro!";
+			emotion 0;
+			next;
+			mes "[Padre Thomas]";
+			mes "Por causa disso lhe permitirei pular a primeira tarefa. Que tal ja começar na segunda tarefa?";
+			next;
+			mes "[Padre Thomas]";
+			mes "Eu acredito que com o seu poder, você pode passar por essa tarefa facilmente...";
+			mes "Mas se você trabalhar com um Sacerdote, eu acho que você aprenderá mais e se sairá muito melhor.";
+			next;
+			mes "[Padre Thomas]";
+			set PRIEST_Q, 2;
+			set JBLVL, 50;
+			goto L_Test2;
+	M_2b:
+		mes "[Padre Thomas]";
+		mes "Sacerdotes também são seguidores de Deus. Eles são altamente treinados e muito mais poderosos que Noviços.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Para se tornar um Sacerdote, você deve ter no mínimo nível 40 de classe. Você então terá que passar por uma série de testes para provar ser digno.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Se você se tornar um Sacerdote, você se tornará muito importante para todas as outras classes.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Você NUNCA deve ajudar uma pessoa por dinheiro ou benefício próprio. Ser Sacerdote é ser caridoso.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Nós Sacerdotes temos apenas um objetivo, que é ajudar aos outros...";
+		close;
+	M_2End:
+		mes "[Padre Thomas]";
+		mes "Ah então é isso?... Bem, estou atoa, e você?";
+		mes "Por favor não esqueça seus deveres como Noviço, e tome cuidado para não sair do caminho da salvação.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Espero sua visita logo, e por favor me diga como os outros Noviços estão. Que Deus esteja do seu lado...";
+		close;
+
+
+
+L_Test1:
+	if (PRIEST_Q2 == 1) goto L_NotDone1a;
+	if (PRIEST_Q2 == 2) goto L_NotDone1b;
+	if (PRIEST_Q2 == 3) goto L_NotDone1c;
+	if (PRIEST_Q2 == 4) goto L_Done1;
+	mes "Certo, deixe-me dizer o que você deve fazer na primeira tarefa.";
+	next;
+	mes "[Padre Thomas]";
+	mes "Primeiro você deve encontrar o ^5533FFIrmão Simão^000000, ele está localizado 1 mapa a Norte e 2 mapas a Leste de Prontera, próximo à St. Capitolina Abbey.";
+	next;
+	mes "[Padre Thomas]";
+	mes "Depois você terá que encontrar a ^5533FFIrmã Matilda^000000. Ela está localizada 1 mapa a Norte de Morroc.";
+	next;
+	mes "[Padre Thomas]";
+	mes "Por último e não menos importante, você terá que encontrar o ^5533FFIrmão Bartolomeu^000000.";
+	mes "Eu ouvi dizer que o Irmão Bartolomeu geralmente é visto numa pequena ilha 2 mapas a Oeste e 1 mapa a Norte de Prontera.";
+	next;
+	mes "[Padre Thomas]";
+	mes "Por favor, tome cuidado na sua jornada. Se tiver alguma dúvida pode falar comigo novamente.";
+	mes "Lembre-se de falar comigo novamente quando terminar a primeira tarefa.";
+	next;
+	mes "[Padre Thomas]";
+	mes "Que Deus esteja contigo...";
+	set PRIEST_Q, 1;
+	set PRIEST_Q2, 1;
+	close;
+
+	L_NotDone1a:
+		mes "O que? Por que você ainda está aqui? Esqueceu a primeira tarefa?";
+		next;
+		menu "Sim, pode me dizer a primeira tarefa novamente?",sM_3a, "Não! Como eu poderia esquecer.",sM_3End;
+
+		sM_3a:
+			mes "[Padre Thomas]";
+			mes "Hmm... se você está tendo problemas com essa tarefa, creio que terá ainda mais problemas com as outras....";
+			next;
+			mes "[Padre Thomas]";
+			mes "Por favor, visite o ^5533FFIrmão Simão^000000. Ele está localizado 1 mapa a Norte ae 2 mapas Leste de Prontera, próximo à St. Capitolina Abbey.";
+			close;
+
+		sM_3End:
+			mes "[Padre Thomas]";
+			mes "Ah, e se tiver alguma duvida, fale com a irmã Cecile próximo a entrada.";
+			next;
+			mes "[Padre Thomas]";
+			mes "Por favor, ande logo, e tenha cuidado na sua jornada. Que o Senhor olhe e sorria para você....";
+			close;
+	L_NotDone1b:
+		mes "Hmmm??";
+		emotion 1;
+		next;
+		mes "[Padre Thomas]";
+		mes "Você já foi ver a ^5533FFIrmã Matilda^000000? Ela pode ser encontrada perto de Morroc no Deserto de Sograt.";
+		mes "Mesmo Morroc sendo distante, eu sei que você conseguirá encontrá-la.";
+		close;
+		
+	L_NotDone1c:
+		mes "Já encontrou a Irmã Matilda em Morroc? Neste caso, agora você deve encontrar o ^5533FFIrmão Bartolomeu^000000.";
+		mes "Ele está numa pequena ilha 2 mapas a Oeste e 1 mapa a Norte de Prontera.. Você deve ir e falar com ele!.";
+		close;
+		
+	L_Done1:
+		mes "Então você falou com todos os Clérigos? Bom trabalho, você completou a primeira tarefa.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Agora vamos começar a segunda tarefa. Esteja preparado para encarar um grande terror.. Se você quiser, você pode pedir para um Sacerdote te acompanhar nessa tarefa.";
+		set PRIEST_Q, 2;
+		set PRIEST_Q2, 0;
+		next;
+		mes "[Padre Thomas]";
+
+L_Test2:
+	if(PRIEST_Q2 == 1) goto L_ReTest2;
+	if(PRIEST_Q2 == 2) goto L_Done2;
+	mes "Então, está pronto para começar a segunda tarefa?";
+	M_Menu:
+	next;
+	menu "Sim, vamos começar.",M_4a, "Deixe-me me preparar, voltarei mais tarde.",M_4End;
+                                             	            
+	M_4a:
+		mes "[Padre Thomas]";
+		mes "Muito bem. Vou enviá-lo ao ^5544FFPadre Peter^000000. Fale com ele sobre a segunda tarefa.";
+		next;
+		set PRIEST_Q2, 1;
+		warp "job_prist.gat", 24, 180;
+		savepoint "prt_church.gat", 16, 37;
+		end;
+		
+	M_4End:
+		mes "[Padre Thomas]";
+		mes "Certo, prepare-se e volte. Acredito que você conseguirá passar pelas buscas sem muita dificuldade.";
+		close;
+
+	L_ReTest2:
+		mes "Você parece muito cansado... mas adivinhe, você ficará ainda mais cansado quando se tornar um Sacerdote.";
+		mes "Por favor, não desista. Quer tentar fazer a tarefa novamente?";
+		goto M_Menu;
+		
+	L_Done2:
+		mes "Bom trabalho. Você conseguiu passar por todas as buscas e terminou a segunda tarefa.";
+		mes "Se você passar pela ultima tarefa, Eu acredito que você se tornará um dos melhores Sacerdotes de todos os tempos!";
+		next;
+		mes "[Padre Thomas]";
+		mes "Agora, para o teste final, vá falar com a ^5533FFIrmã Cecile^000000. Assim que passar, venha falar comigo.";
+		next;
+		mes "[Padre Thomas]";
+		mes "Eu estarei esperando aqui. Boa sorte criança.";
+		set PRIEST_Q, 3;
+		set PRIEST_Q2, 0;
+		close;
+
+L_Test3:
+	mes "Vá falar com a ^5533FFIrmã Cecile^000000 e complete o último teste.";
+	next;
+	mes "[Padre Thomas]";
+	mes "Boa sorte. Estarei aqui esperando as boas novas..";
+	close;
+
+
+L_Change:
+	if (SkillPoint > 0) mes "Espere. Você deve usar todos os seus pontos de classe antes de virar Sacerdote.";
+	if (SkillPoint > 0) close;
+	mes "Parabéns! Você completou todos os testes. Agora posso torná-lo um Sacerdote.";
+	emotion 21;
+	next;
+	mes "[Padre Thomas]";
+	mes "Deus, por favor ofereça a "+strcharinfo(0)+" a força e coragem de lutar contra o mal e ajudar a humanidade.";
+	next;
+	callfunc "Job_Change",Job_Priest;
+	mes "[Padre Thomas]";
+	mes "Agora você é um Sacerdote. Como Sacerdote, você pode agora ajudar um monte de gente em nome de Deus.";
+	next;
+	if (JBLVL != 50) getitem 1550, 1;
+	if (JBLVL == 50) getitem 1551, 1;
+	callfunc "F_ClearJobVar";		// clears all job variables for the current player
+	mes "[Padre Thomas]";
+	mes "Aqui, pegue esse livro como recompensa por ter passado por todos os testes. Este livro o ajudará a entender mais sobre Deus.";
+	next;
+	mes "[Padre Thomas]";
+	mes "Espero que você possa servir como exemplo para vários Noviços em toda Rune Midgard.";
+	mes "Por favor, seja um bom Sacerdote e ajude a melhorar esse mundo!";
+	close;
+}
+
+
+function	script	F_FatherRub	{
+//prt_fild03.gat,364,255
+	if(PRIEST_Q == 1 && PRIEST_Q2==1) goto L_Test;
+	if(PRIEST_Q==1 && PRIEST_Q2 > 1) goto L_Done;
+	mes "É bom vê-lo novamente. Espero que tudo esteja bem? Continue no seu caminho de ajudar aos outros e servir a Deus, e rezemos pela salvação da humanidade.";
+	close;
+
+L_Test:
+	mes "Opa... e ae?";
+	next;
+	mes "[Irmão Simão]";
+	mes "Oque é isso? Você está aqui por que quer servir a Deus com uma capacidade ainda maior?";
+	emotion 1;
+	next;
+	menu "Sim, Eu acredito que o Sacerdócio seja o caminho correto.",-, "Não, na verdade não.... só vim falar oi.",M_No;
+
+		mes "[Irmão Simão]";
+		mes "Haha! Muito bom. Nós precisamos de mais pessoas como você para lutar contra o mal que persegue esse mundo.";
+		emotion 21;
+		next;
+		mes "[Irmão Simão]";
+		mes "Devido ao seu bom coração, eu lhe darei minha benção criança. Por favor, encontre a ^5533FFIrmã Matilda^000000 agora.";
+		next;
+		mes "[Irmão Simão]";
+		mes "Você pode encontrá-la no mapa a norte de Morroc. Tenha uma boa viagem e boa sorte ao se tornar um Sacerdote.";
+		set PRIEST_Q2, 2;
+		close;
+	M_No:
+		mes "[Irmão Simão]";
+		mes "Oh... bem... Ola para você também. De qualquer maneira é bom ver um servo de Deus como você. Estou um pouco ocupado agora, então se você não se importa.....";
+		emotion 4;
+		close;
+
+L_Done:
+	mes "Encontre a ^5533FFIrmã Matilda^000000 agora. Boa sorte no seu caminho de se tornar um Sacerdote";
+	close;
+}
+
+function	script	F_MotherMart	{
+//moc_fild07.gat,41,354
+
+	if(PRIEST_Q==1 && PRIEST_Q2==2) goto L_Test;
+	if(PRIEST_Q==1 && PRIEST_Q2 > 2) goto L_Done;
+	mes "Oh... Já tem um tempo desde que te vi pela última vez. Nossa, como você cresceu. É bom saber que os servos de Deus continuam se aperfeiçoando.";
+	mes "Eu te desejo muito sucesso criança, e sempre se lembre de ter Fé.";
+	close;
+
+L_Test:
+	mes "Ah, você ta aqui para o teste de Sacerdote né? Devo dizer, você fez um ótimo trabalho vindo até aqui.";
+	next;
+	mes "[Irmã Matilda]";
+	mes "Isso mostra que você tem fé de verdade! É um prazer para mim te deixar continuar no seu caminho.";
+	next;
+	mes "[Irmã Matilda]";
+	mes "Agora você deve encontrar o ^5533FFIrmão Bartolomeu^000000. Ele está a 1 mapa a Norte e 2 a Leste de Prontera. Tenho certeza que você será um bom Sacerdote!";
+	set PRIEST_Q2, 3;
+	close;
+
+L_Done:
+	mes "Para completar sua tarefa, você deve encontrar o ^5533FFIrmão Bartolomeu^000000. Tenha cuidado e lembre-se de rezar.";
+	close;
+}
+
+// Function: Father Yosuke --------------------------------------------------------------------------
+function	script	F_FatherYos	{
+//prt_fild00.gat,209,218
+
+	if(PRIEST_Q==1 && PRIEST_Q2==3) goto L_Test;
+	if(PRIEST_Q==1 && PRIEST_Q2==4) goto L_Done;
+	mes "Só porque você é um servo de Deus não significa que você vir aqui e me incomodar. Saia, por favor...";
+	close;
+
+L_Test:
+	mes "Hmm...? Precisa de alguma coisa? Oh, o teste de Sacerdote..... você tem certeza de que é isso que você quer?";
+	emotion 1;
+	next;
+	mes "[Irmão Bartolomeu]";
+	mes "Pois bem. Permitirei que você passe. Volte para a Igreja e converse com o Padre Thomas. Seu dever aqui foi cumprido";
+	set PRIEST_Q2, 4;
+	close;
+
+L_Done:
+	mes "Ugh? O que você está esperando...? Eu disse para você voltar a Igreja.... Estou muito ocupado....";
+	emotion 1;
+	close;
+}
+
+
+//**********************************************************************************************************************************************************************************\\
+//================================================== Padre Peter: Test 2 ====================================================\\
+//**********************************************************************************************************************************************************************************\\
+job_prist.gat,24,186,4	script	Padre Peter	110,{
+
+L_Start:
+	mes "[Padre Peter]";
+	mes "Deus te abençoe!! Bem vindo!";
+	mes "Primeiramente, gostaria de parabeniza-lo por passar no primeiro teste.";
+	next;
+	mes "[Padre Peter]";
+	mes "Meu nome é Peter.";
+	mes "Wow, você viu o Thomas?";
+	next;
+	mes "[Padre Peter]";
+	mes "Oh, então ele já é um Padre? hahah...";
+	mes "Acho que posso chama-lo de Padre Thomas!";
+	next;
+	mes "[Padre Peter]";
+	mes "Então.. você sabe porque está aqui? No seu próximo teste, você terá que superar uma série de caminhos que envolvem os poderes malignos.";
+	mes "Você entende o que eu quero dizer?";
+	next;
+	menu "Sim, eu entendo.",-, "Não, eu não entendo..?",M_1b;
+
+		mes "[Padre Peter]";
+		mes "Wow, você é esperto, mas eu acho melhor você escutar o que eu tenho a dizer.";
+		mes "heheh!";
+		goto L_Cont;
+	M_1b:
+		mes "[Padre Peter]";
+		mes "Oh, então é isso, explicarei tudinho a você.";
+		mes "Depois que você escutar o que eu tenho a dizer, acho que você entenderá.";
+		next;
+
+	L_Cont:
+	mes "[Padre Peter]";
+	mes "Como superar o Mal? é basicamento destruindo-o.";
+	mes "O que é o Mal? É basicamente demônios, fantasmas e etc...";
+	next;
+	mes "[Padre Peter]";
+	mes "Existe muita maldade nesse mundo.";
+	mes "O Mal geralmente importuna as pessoas que acreditam em Deus.";
+	next;
+	mes "[Padre Peter]";
+	mes "Nós Sacerdotes,somos supostos a livra-los de todo o mal!";
+	mes "Este é o único caminho para trazer paz no mundo!";
+	next;
+	mes "[Padre Peter]";
+	mes "Se você for bem dedicado, então essas experimentações não devem ser um grande desafio.";
+	mes "Mesmo assim, Se você quiser, pode perguntar para algum Sacerdote se ele pode te ajudar nesse teste.";
+	next;
+	mes "[Padre Peter]";
+	mes "Bem, podemos começar?";
+	M_Menu:
+	next;
+	menu "Sim.",M_2a, "Espere um pouco.",M_2b, "Eu quero voltar para a cidade.",M_2c;
+
+	M_2a:
+		mes "[Padre Peter]";
+		mes "Certo, então entre na sala de espera.";
+		close;
+
+	M_2b:
+		mes "[Padre Peter]";
+		mes "Oh você precisa se preparar?";
+		mes "Sem problemas, você pode começar quando estiver pronto.";
+		close;
+	M_2c:
+		mes "[Padre Peter]";
+		mes "O que? Você quer voltar? Mas você acabou de chegar?";
+		mes ".....";
+		next;
+		mes "[Padre Peter]";
+		mes "Talvez por ser sua primeira vez, esteja com um pouco de medo.";
+		mes "Você pode voltar quando estiver mais confiante.";
+		next;
+		warp "prt_church.gat", 16, 37;
+		close;
+
+OnInit:
+	waitingroom "Sala de Espera do Teste de Sacerdote",8,"Padre Peter::OnStart",1;
+	end;
+OnStart:
+	set $@PrstUsers, getareausers("job_prist.gat", 8, 34, 39,109);
+	set $@PrstUsers, $@PrstUsers + getareausers("job_prist.gat", 160, 14, 175, 178);
+	set $@PrstUsers, $@PrstUsers + getareausers("job_prist.gat", 90, 34, 105,105);
+	if($@PrstUsers > 0) end;				// stops the rest of the script from running if there is already another player taking the test
+
+	if((getwaitingroomstate(33)) == 0) end;			// stops the rest of the script from running if there is no one in the waiting room
+	disablenpc "prst1_1";	//disables the exit warp
+	disablenpc "prst2_1";
+	warpwaitingpc "job_prist.gat", 24, 44;
+	killmonsterall "job_prist.gat";
+	donpcevent "PrstTest2_1";
+	end;
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------\\
+//				Test 2, Part 1: Kill the Zombies				              \\
+//********************************************************************************************************************************\\
+job_prist.gat,1,1,1	script	PrstTest2_1	-1,{
+	set $@PrstRm, 1;		//used to determine what areawarp and areaannounce to use
+	enablenpc "Zombie1_Trig";
+	enablenpc "Zombie2_Trig";
+	enablenpc "Zombie3_Trig";
+	enablenpc "Zombie4_Trig";
+	enablenpc "Zombie5_Trig";
+	set $@mob, 13;
+	initnpctimer;
+	end;
+
+OnMobDead:
+	set $@mob, $@mob - 1;
+	if($@mob > 0) end;
+
+	enablenpc "prst1_1";
+	areaannounce "job_prist.gat",8,34,39,109,"[Padre Peter]: Bom trabalho minha criança. Entre no portal para começar o próximo teste.",8;
+	initnpctimer "prst1_1";		//starts a 30 sec timer.  this will warp the player even if they don't enter the warp to keep the test going
+	end;
+
+OnTimer500:
+	areaannounce "job_prist.gat",8,34,39,109,"[Padre Peter]: Para poder passar nesse teste, você terá que matar todos os monstros que aparecerem.",8;
+	end;
+OnTimer2500:
+	stopnpctimer;
+	initnpctimer "TimerPrst";		// starts the 5 min test timer
+	areaannounce "job_prist.gat",8,34,39,109,"[Padre Peter]: Seja cauteloso e cuidado com o tempo.",8;
+	end;
+}
+
+// These hidden warps spawn the monsters when you walk
+// First set  of Zombies------------------------------------------------------------
+job_prist.gat,23,52,1	script	Zombie1_Trig	139,16,0,{
+
+	monster "job_prist.gat",24,52,"Robbery",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",18,52,"Evilness",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",30,52,"Jealousy",1015,1,"PrstTest2_1::OnMobDead";
+	disablenpc "Zombie1_Trig";		//disables the npc so that it can't spawn the monsters more than once
+	end;
+}
+
+// Second set  of Zombies----------------------------------------------------
+job_prist.gat,23,62,1	script	Zombie2_Trig	139,16,0,{
+
+	monster "job_prist.gat",21,62,"Anger",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",27,62,"Wonderness",1015,1,"PrstTest2_1::OnMobDead";
+	disablenpc "Zombie2_Trig";
+	end;
+}
+
+// Third set  of Zombies--------------------------------------------------------
+job_prist.gat,23,72,1	script	Zombie3_Trig	139,16,0,{
+
+	monster "job_prist.gat",24,72,"Cockyness",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",18,72,"Slutty",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",30,72,"Lazyness",1015,1,"PrstTest2_1::OnMobDead";
+	disablenpc "Zombie3_Trig";
+	end;
+}
+
+// Fourth set  of Zombies--------------------------------------------------------
+job_prist.gat,23,82,1	script	Zombie4_Trig	139,16,0,{
+
+	monster "job_prist.gat",21,82,"Greed",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",27,82,"Greedyness",1015,1,"PrstTest2_1::OnMobDead";
+	disablenpc "Zombie4_Trig";
+	end;
+}
+
+// Fifth set of Zombies ---------------------------------------------------------
+job_prist.gat,23,92,1	script	Zombie5_Trig	139,16,0,{
+
+	monster "job_prist.gat",24,92,"Faithless",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",18,92,"Non-believer",1015,1,"PrstTest2_1::OnMobDead";
+	monster "job_prist.gat",30,92,"Scaryness",1015,1,"PrstTest2_1::OnMobDead";
+	disablenpc "Zombie5_Trig";
+	end;
+}
+
+
+// End warp for 1st part of test--------------------------------------------------------------------
+job_prist.gat,24,109,1	script	prst1_1	45,3,3,{
+
+	if(BaseJob == Job_Priest) end;		//If a Priest friend steps on the warp nothing happens. Need the aco to step on the warp.
+OnTimer30000:
+	stopnpctimer;
+	areawarp "job_prist.gat",8,34,39,109,"job_prist.gat",168,17;
+	killmonsterall "job_prist.gat";
+	donpcevent "PrstTest2_2::OnStart";
+	end;
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------\\
+//				Test 2, Part 1: Resist Temptation			              \\
+//********************************************************************************************************************************\\
+job_prist.gat,1,1,0	script	PrstTest2_2	-1,{
+
+OnStart:
+	enablenpc "Devi_Trig";		//enables these npc's just in case they were disabled by a previous tester
+	enablenpc "Deviruchi";
+	enablenpc "Doppel_Trig";
+	enablenpc "Doppel";
+	enablenpc "Dark_Trig";
+	enablenpc "Senhor das Trevas";
+	enablenpc "Bapho_Trig";
+	enablenpc "Bafomé";
+	set $@PrstRm, 2;
+	set $PRIEST_Q3, 0;
+	initnpctimer;
+	end;
+
+OnCheck:
+	set $PRIEST_Q3, $PRIEST_Q3 + 1;	//this counter checks to see if the player spoke with each devil and answered the questions
+	if($PRIEST_Q3 < 4) end;
+
+	enablenpc "prst2_1";
+	areaannounce "job_prist.gat", 160, 14, 175, 178, "[Padre Peter]: Excelente! Você esteve ótimo! Entre no portal e vá para a próxima sala.",8;
+	initnpctimer "prst2_1";		//starts a 30 sec timer. this will warp the player even if they don't enter the warp to keep the test going
+	end;
+
+OnTimer500:
+	stopnpctimer;
+	areaannounce "job_prist.gat", 160, 14, 175, 178, "[Padre Peter]: Esse teste irá testar sua força e crença em Deus!",8;
+	end;
+
+}
+
+
+// Deviruchi ------------------------------------------------------------------------
+job_prist.gat,168,45,4	script	Deviruchi	738,{
+
+OnStart:
+	if(BaseJob == Job_Acolyte) goto L_Aco;
+
+L_Priest:
+	mes "[Deviruchi]";
+	mes "Hey, O que um Sacerdote como você faz num lugar desses? Volte para a cidade. Você está desperdiçando o seu tempo aqui?";
+	next;
+	mes "[Deviruchi]";
+	mes "Me sinto feliz hoje, então irei poupa-lo, Agora vá. Na próxima vez que você aparecer aqui. Eu vou te derrubar.";
+	close;
+
+L_Aco:
+	mes "[Deviruchi]";
+	mes "Hey, você não é um noviço? Não vejo um faz anos. Parece que você está tentado tornar-se um Sacerdote...";
+	next;
+	mes "[Deviruchi]";
+	mes "Eu posso te contar o quão triste é ser um seguidor de Deus. Eu acho que é por isso que você está aqui.";
+	next;
+	mes "[Deviruchi]";
+	mes "O seu percurso será dificil. Não existe uns trabalhos melhores para se fazer?";
+	next;
+	mes "[Deviruchi]";
+	mes "Não importa se você está na cidade, numa caverna, todas as pessoas sempre vão pedir a sua ajuda. Não é engraçado que eles nunca te ajudaram?";
+	next;
+	mes "[Deviruchi]";
+	mes "Vou te dar um conselho, você deve desistir agora. O teste será dificil, e o trajeto que você vai andar é complicado.";
+	next;
+	menu "É... você tem razão.",-, "SAI FORA Demônio!.",M_1a;
+
+		mes "[Deviruchi]";
+		mes "Essa é uma boa escolha, você não precisa voltar a este lugar denovo! Já que você decidiu desistir, lhe darei um presente.";
+		next;
+		mes "[Deviruchi]";
+		mes "Deixarei você conhecer meus amigos...DE GRAÇA HAHAHAHAH!";
+		next;
+		warp "c_tower2.gat", 168, 33;
+		end;
+	M_1a:
+		mes "[Deviruchi]";
+		mes "Oh.. Estou morrendo de medo..hahaha. Não seja assim, escute o que eu tenho a dizer.";
+		next;
+		mes "[Deviruchi]";
+		mes "Se você desistir agora, te darei um lindo presente. Este presente é tão dificil de encontrar.";
+		next;
+		mes "[Deviruchi]";
+		mes "Você acha que pode encontrar uma carta igual a essa? Decida-se, não se arrependa depois...";
+		next;
+		menu "Eu aceito a carta.",-, "SAI FORA demônio!!",sM_1a;
+
+			mes "[Deviruchi]";
+			mes "Hahaha. Todos os humanos são assim, boa escolha! Certo, aqui está a carta!";
+			next;
+			//mesimage "¹Ì½ºÆ®·¹½ºÄ«µå.bmp" 255
+			mes "[Deviruchi]";
+			mes "Bem, eu não posso te dar esta carta. Vá procurar por VOCÊ MESMO!";
+			next;
+			warp "mjolnir_05.gat", 200, 200;
+			end;
+		sM_1a:
+			//mesimage "¹Ì½ºÆ®·¹½ºÄ«µå.bmp" 255
+			mes "[Deviruchi]";
+			mes "Wow, você é um noviço bem resistente, se você continuar a negar melhor ter cuidado.";
+			mes "Estarei de olho, veremos se você vai ser um bom Sacerdote ou não.";
+			next;
+			mes "[Deviruchi]";
+			mes "Um dia, você se lamentará dessa escolha e voltará para mim!";
+			disablenpc "Devi_Trig";	//disables the trigger npc so you don't accidentally activate it again
+			disablenpc "Deviruchi";
+			donpcevent "PrstTest2_2::OnCheck";
+			close;
+}
+
+// Doppelganger ------------------------------------------------------------------------------
+job_prist.gat,168,80,4	script	Doppelganger::Doppel	739,{
+
+OnStart:
+	if(BaseJob == Job_Acolyte) goto L_Aco;
+
+L_Priest:
+	mes "[Doppelganger]";
+	mes "Qual a vantagem de estar aqui?.";
+	mes "Você está entediado? Você já é um Sacerdote porque está aqui?.";
+	next;
+	mes "[Doppelganger]";
+	mes "Você não precisa ajudar esses noviços, vá para casa.";
+	mes "Única coisa que você está fazendo é gastante o seu tempo, vá embora.";
+	close;
+L_Aco:
+	mes "[Doppelganger]";
+	mes "Hey, Noviço espere, escute o que eu tenho para dizer.";
+	next;
+	mes "[Doppelganger]";
+	mes "Você está aqui porque quer ser um Sacerdote, né?";
+	mes "Eu não acho que você possa ser um Sacerdote.";
+	next;
+	mes "[Doppelganger]";
+	mes "Se você quiser, posso usar meus poderes e fazer você voltar a ser Aprendiz.";
+	mes "Voltando a ser Aprendiz, poderá escolher uma nova classe.";
+	next;
+	mes "[Doppelganger]";
+	mes "Bem, a classe que você escolher dependerá do seu nível hehe.";
+	mes "Não é uma boa idéia? Se você quiser eu posso te ajudar agora mesmo.";
+	next;
+	menu "Espero que você possa me ajudar!",-, "SAI FORA demônio!",M_1b;
+
+		mes "[Doppelganger]";
+		mes "Sim.. Foi uma boa escolha.";
+		mes "Deixe-me transforma-lo em Aprendiz.";
+		next;
+		mes "[Doppelganger]";
+		mes "Você sabe que demora um pouco para ressucitar quando você MORRE!!";
+		next;
+		warp "gef_dun02.gat", 210, 177;
+		end;
+	M_1b:
+		mes "[Doppelganger]";
+		mes "Eu acho que você não está entendendo o que eu quero dizer.";
+		mes "Essa é uma das melhores coisas que podem acontecer com você.";
+		next;
+		mes "[Doppelganger]";
+		mes "Basta me dizer que você não quer ser um Sacerdote.";
+		mes "Se você fizer isso, vou poder te transformar em qualquer classe, por exemplo, quer ser um espadachim como eu?";
+		next;
+		menu "Eu não quero ser um Sacerdote!",-, "SAI FORA demônio!",sM_1b;
+
+			mes "[Doppelganger]";
+			mes "Muito bom, você não precisa mais voltar aqui.";
+			mes "certo, deixe-me transforma-lo em Aprendiz...";
+			next;
+			mes "[Doppelganger]";
+			mes "Você sabe que demora um pouco para ressucitar quando você MORRE!!??!!";
+			next;
+			warp "gef_dun02.gat", 210, 177;
+			end;
+		sM_1b:
+			mes "[Doppelganger]";
+			mes "Tudo bem, te pouparei por hoje.";
+			next;
+			mes "[Doppelganger]";
+			mes "Se agente se encontrar novamente, Farei com que sua morte seja dolorosa.";
+			disablenpc "Doppel_Trig";
+			disablenpc "Doppel";
+			donpcevent "PrstTest2_2::OnCheck";
+			close;
+}
+
+// Dark Lord -------------------------------------------------------------------------------
+job_prist.gat,168,115,4	script	Senhor das Trevas	737,{
+
+OnStart:
+	if(BaseJob == Job_Acolyte) goto L_Aco;
+
+L_Priest:
+	mes "[Senhor das Trevas]";
+	mes "Sinta raiva e ódio!!";
+	mes "Sinta como é ser traido pelos amigos!";
+	next;
+	mes "[Senhor das Trevas]";
+	mes "Fique aqui, e treine conosco, quando tiver forte o suficiente, então você pode voltar!";
+	mes "Fique conosco e aprenda o poder da Maldição!";
+	close;
+L_Aco:
+	mes "[Senhor das Trevas]";
+	mes "Humano, pare agora mesmo!.";
+	mes "Quem te deu permissão para andar por aqui!";
+	next;
+	mes "[Senhor das Trevas]";
+	mes "Se você quiser ser um Sacerdote, você não pode passar por aqui.";
+	mes "Vá, antes que eu te mate.";
+	next;
+	mes "[Senhor das Trevas]";
+	mes "Vocês conseguem ser mais irritantes do que as próprias formigas, saia e pare de me encher!";
+	next;
+	menu "Desculpe-me, por favor me perdoe.",-, "SAI FORA demônio!.",M_1c;
+
+		mes "[Senhor das Trevas]";
+		mes "Não volte nunca mais!";
+		next;
+		warp "gl_church.gat", 145, 170;
+		end;
+	M_1c:
+		mes "[Senhor das Trevas]";
+		mes "Não tente bancar o valentão.";
+		mes "Eu posso te cortar em pedaços com meu dedo mindinho.";
+		next;
+		mes "[Senhor das Trevas]";
+		mes "Antes que eu use meus poderes sombrios em você, saia!";
+		next;
+		menu "Por favor, piedade.",-, "SAI FORA demônio!",sM_1c;
+
+			mes "[Senhor das Trevas]";
+			mes "Não apareça mais!";
+			next;
+			warp "gl_church.gat", 145, 170;
+			end;
+		sM_1c:
+			mes "[Senhor das Trevas]";
+			mes "Então você decidiu ficar? Seu humano imundo, matar você sujará minhas mãoss.";
+			next;
+			mes "[Senhor das Trevas]";
+			mes "Se nos encontrarmos novamente, eu vou te matar.";
+			disablenpc "Dark_Trig";
+			disablenpc "Senhor das Trevas";
+			donpcevent "PrstTest2_2::OnCheck";
+			close;
+}
+
+// Baphomet -----------------------------------------------------------------------------
+job_prist.gat,168,150,4	script	Bafomé	736,{
+
+OnStart:
+	if(BaseJob == Job_Acolyte) goto L_Aco;
+
+L_Priest:
+	mes "[Bafomé]";
+	mes "Sacerdotes irritantes...";
+	next;
+	mes "[Bafomé]";
+	mes "Não tenho nada para conversar com você, saia.";
+	close;
+L_Aco:
+	mes "[Bafomé]";
+	mes "Hey, humano.";
+	next;
+	mes "[Bafomé]";
+	mes "Está interessado num acordo?";
+	next;
+	mes "[Bafomé]";
+	mes "Posso fazer você ser a pessoa mais rica e famosa nesse mundo.";
+	mes "Dinheiro ilimitado e armas que nenhum humano pode ter...";
+	next;
+	mes "[Bafomé]";
+	mes "Também, se você quiser, pode me chamar sempre que precisar.";
+	mes "Se você fizer isso, todo mundo terá medo de você hahahaha.";
+	next;
+	mes "[Bafomé]";
+	mes "Acho que você deveria desistir de ser um Sacerdote e aceitar o meu acordo.";
+	mes "Se aceitar meu acordo, o mundo será seu.";
+	next;
+	menu"Desisto de ser um Sacerdote.",-, "SAI FORA demônio!",M_1d;
+
+		mes "[Bafomé]";
+		mes "Certo, vamos assinar o contrato...";
+		mes "você não se esquecerá disso...";
+		next;	
+		mes "[Bafomé]";
+		mes "Você vai procurar saber, onde eu moro.";
+		mes "Chegando lá, volte e assine o contrato.";
+		next;
+		warp "glast_01.gat", 200, 203;
+		end;
+	M_1d:
+		mes "[Bafomé]";
+		mes "Tudo bem, vou embora.";
+		mes "Mas, você não vai sair assim facilmente.";
+		next;
+		mes "[Bafomé]";
+		mes "Eu já I already lancei materiais malignos em você...";
+		mes "Quero ver quanto tempo você vai durar.";
+		next;
+		mes "[Bafomé]";
+		mes "OKay go now.";
+		disablenpc "Bapho_Trig";
+		disablenpc "Bafomé";
+		donpcevent "PrstTest2_2::OnCheck";
+		close;
+}
+
+
+// These hidden warps trigger the npcs when you get near them
+// Deviruchi Trigger --------------------------------------------------------------------
+job_prist.gat,167,40,1	script	Devi_Trig	139,8,0,{
+
+	doevent "Deviruchi::OnStart";
+	end;
+}
+// Doppleganger Trigger --------------------------------------------------------------------
+job_prist.gat,167,77,1	script	Doppel_Trig	139,8,0,{
+
+	doevent "Doppel::OnStart";
+	end;
+}
+// Dark Lord Trigger --------------------------------------------------------------------
+job_prist.gat,167,112,1	script	Dark_Trig	139,8,0,{
+
+	doevent "Dark Lord::OnStart";
+	end;
+}
+// Baphomet Trigger --------------------------------------------------------------------
+job_prist.gat,167,145,1	script	Bapho_Trig	139,8,0,{
+
+	doevent "Baphomet::OnStart";
+	end;
+}
+
+
+// End warp for 2nd part of test ---------------------------------------------------------
+job_prist.gat,168,180,0	script	prst2_1	45,3,3,{
+
+	if(BaseJob == Job_Priest) end;		//If a Priest friend steps on the warp nothing happens. Need the Aco to step on the warp.
+OnTimer30000:
+	set $@PrstRm, 3;
+	set $PRIEST_Q3, 0;
+	enablenpc "Mummy1_Trig";		//enables the floor triggers for the next test
+	enablenpc "Mummy2_Trig";
+	enablenpc "Mummy3_Trig";
+	stopnpctimer;
+	initnpctimer "prst3_1";
+	areawarp "job_prist.gat", 160, 14, 175, 178, "job_prist.gat", 98, 40;
+	end;
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------\\
+//				Test 2, Part 3: Make it to the exit 			               \\
+//******************************************************************************************************************************* *\\
+// First set of Mummies --------------------------------------------------------
+job_prist.gat,97,50,0	script	Mummy1_Trig	139,8,1,{
+
+	monster "job_prist.gat", 93, 55, "ca", 1041,1;
+	monster "job_prist.gat", 102, 55, "ah", 1041,1;
+	disablenpc "Mummy1_Trig";
+	end;
+}
+// Second set of Mummies --------------------------------------------------------
+job_prist.gat,97,65,0	script	Mummy2_Trig	139,8,1,{
+
+	monster "job_prist.gat", 93, 70, "men", 1041,1;
+	monster "job_prist.gat", 102, 70, "ahke", 1041,1;
+	disablenpc "Mummy2_Trig";
+	end;
+}
+// Third set of Mummies --------------------------------------------------------
+job_prist.gat,97,80,0	script	Mummy3_Trig	139,8,1,{
+
+	monster "job_prist.gat", 93, 85, "mea", 1041,1;
+	monster "job_prist.gat", 102, 85, "sne", 1041,1;
+	disablenpc "Mummy3_Trig";
+	end;
+}
+
+
+// End warp for 3rd part of test ----------------------------------------------
+job_prist.gat,98,105,0	script	prst3_1	45,2,2,{
+
+	if(BaseJob == Job_Priest) end;		//If a Priest friend steps on the warp nothing happens. Need the Aco to step on the warp.
+	stopnpctimer "TimerPrst";
+	areawarp "job_prist.gat", 90, 34, 105, 105, "prt_church.gat",16, 37;
+	set PRIEST_Q2, 2;
+	killmonsterall "job_prist.gat";
+	donpcevent "Padre Peter::OnStart";
+	end;
+
+OnTimer500:
+	stopnpctimer;
+	areaannounce "job_prist.gat",  90, 34, 105,105, "[Padre Peter]: Esse é o último teste que você precisa enfrentar, minha criança. Tenha fé, eu sei que voc~e é capaz!",8;
+	end;
+}
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------\\
+//					Timer					              \\
+//********************************************************************************************************************************\\
+job_prist.gat,1,1,0	script	TimerPrst	-1,{
+
+OnTimer3000:
+	areaannounce "job_prist.gat",8,34,39,109,"[Padre Peter]: Você terá 5 minutos para passar pelos 3 testes.",8;
+	end;
+OnTimer33000:
+	donpcevent "Padre Peter::OnStart";
+	end;
+OnTimer63000:
+	set $@PrstTime$, "Você tem mais 4 minutos!";
+	donpcevent "Padre Peter::OnStart";
+	goto AnnouncePrst;
+OnTimer93000:
+	donpcevent "Padre Peter::OnStart";
+	end;
+OnTimer123000:
+	set $@PrstTime$, "Você tem mais 3 minutos!";
+	donpcevent "Padre Peter::OnStart";
+	goto AnnouncePrst;
+OnTimer153000:
+	donpcevent "Padre Peter::OnStart";
+	end;
+OnTimer183000:
+	set $@PrstTime$, "Você tem mais 2 minutos!";
+	donpcevent "Padre Peter::OnStart";
+	goto AnnouncePrst;
+OnTimer213000:
+	donpcevent "Padre Peter::OnStart";
+	end;
+OnTimer243000:
+	set $@PrstTime$, "Você tem mais 1 minuto!";
+	donpcevent "Padre Peter::OnStart";
+	goto AnnouncePrst;
+OnTimer273000:
+	set $@PrstTime$, "Você tem mais 30 segundos!";
+	donpcevent "Padre Peter::OnStart";
+	goto AnnouncePrst;
+OnTimer293000:
+	set $@PrstTime$, "Você tem mais 10 segundos!";
+	goto AnnouncePrst;
+	end;
+OnTimer2970000:
+	set $@PrstTime$, "Você tem mais 5 segundos.";
+	goto AnnouncePrst;
+	end;
+OnTimer302000:
+	set $@PrstTime$, "O tempo acabou. Você falhou no teste.";
+	goto AnnouncePrst;
+OnTimer306000:
+	stopnpctimer;
+	if($@PrstRm==1) areawarp "job_prist.gat",8,34,39,109,"prt_church.gat",16, 37;
+	if($@PrstRm==2) areawarp "job_prist.gat",160, 14, 175, 178,"prt_church.gat",16, 37;
+	if($@PrstRm==3) areawarp "job_prist.gat", 90, 34, 105,105,"prt_church.gat",16, 37;
+	killmonsterall "job_prist.gat";
+	donpcevent "Padre Peter::OnStart";
+	end;
+
+AnnouncePrst:
+	if($@PrstRm==1) areaannounce "job_prist.gat",8,34,39,109,"[Padre Peter]: "+$@PrstTime$+".",8;
+	if($@PrstRm==2) areaannounce "job_prist.gat",160, 14, 175, 178, "[Padre Peter]: "+$@PrstTime$+".",8;
+	if($@PrstRm==3) areaannounce "job_prist.gat",  90, 34, 105,105, "[Padre Peter]: "+$@PrstTime$+".",8;
+	end;
+}
+
+
+
+//**********************************************************************************************************************************************************************************\\
+//================================================= Sister Cecile: Test 3 =====================================================\\
+//**********************************************************************************************************************************************************************************\\
+prt_church.gat,27,24,4	script	Irmã Cecile	79,{
+	mes "[Irmã Cecile]";
+	if(BaseJob == Job_Priest) goto L_Prst;
+	if(BaseJob == Job_Acolyte) goto L_Aco;
+	if(BaseJob == Job_Novice) goto L_Nov;
+
+L_Other:
+	mes "Essa é a Igreja de Prontera, em que posso ajudar?";
+	next;
+	menu "Por favor, fale-me sobre os Sacerdotes.",-, "Eu estava só andando por perto.",M_End0;
+
+		mes "[Irmã Cecile]";
+		mes "Sacerdote são servos de Deus. Eles tem poderes especiais que podem ajudar quem estiver com dificuldades.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Por serem seguidores de Deus, eles não podem usar espadas e nenhum outro tipo de armas.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Claro, se você quiser saber mais sobre Sacerdotes, é melhor perguntar a um pessoalmente.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Por favor, fique o tempo que desejar. A igreja é um santuário para todos aqueles que a procuram.";
+		close;
+	M_End0:
+		mes "[Irmã Cecile]";
+		mes "Por favor relaxe, ficar andando por aí deve ser cansativo.";
+		close;
+
+L_Nov:
+	mes "Que Deus te abençoe, minha criança. A Igreja de Prontera lhe da as boas vindas.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Você já escolheu a sua Classe? Não quer ser um ajudante de Deus?";
+	mes "Sendo um Noviço e ajudando as pessoas você estará mais perto de Deus.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Se você quiser ser um Noviço, converse com o ^5533FFPadre Areusis^000000 na sala próxima ao corredor.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Quando tiver alcançado nível 40 de classe como Noviço, você poderá se tornar um Sacerdote.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Desde que você seja um Noviço, pense cuidadosamente sobre qual Classe você quer ser.";
+	close;
+
+L_Prst:
+	if(sex == 1) mes "Que Deus te abençoe, Irmão Sacerdote.";
+	if(sex == 0) mes "Que Deus te abençoe, Irmã Sacerdotisa.";
+	mes "Eu desejo a todos o melhor. Fortaleça a sua Fé e lembre-se que Deus ama a todos, e deve ser assim.";
+	close;
+
+L_Aco:
+	if(PRIEST_Q == 1) goto L_Test1;
+	if(PRIEST_Q == 2) goto L_Test2;
+	if(PRIEST_Q == 3) goto L_Start;
+	if(PRIEST_Q == 4) goto L_Done;
+	if(sex == 1) mes "Que Deus te abençoe, Irmão.";
+	if(sex == 0) mes "Que Deus te abençoe, Irmã.";
+	mes "Por que você está aqui?";
+	next;
+	menu "Eu quero ser um Sacerdote.",-, "Eu estava apenas olhando.",M_End1;
+
+		mes "[Irmã Cecile]";
+		mes "Oh, então você quer ser um Sacerdote?";
+		mes "Um monte de Noviços querem ser Sacerdotes.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Meu nome é Irmã Cecile, Eu sou responsável por ajudar os Noviços a serem Sacerdotes.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Porque eu nasci e moro aqui, tenho visto muitas pessoas transformando-se em Sacerdotes por todos esses anos.";
+		mes "Por isso eu gosto de ajudar as pessoas que vem aui para serem Sacerdotes.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Para se tornar um Sacerdote, você terá que completar 3 testes. Se você quiser mudar sua Classe agora, você deve falar com o Padre Thomas,";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Se você encontrar algum problema durante os testes, venha falar comigo e talvez eu possa te ajudar.";
+		close;
+	M_End1:
+		mes "[Irmã Cecile]";
+		mes "Por favor relaxe e descanse. A Igreja deve ser sua casa.";
+		close;
+
+L_Start:
+	if(PRIEST_Q2 == 1) goto L_ReTest;
+	mes "Bom trabalho, você completou o segundo teste com sucesso...!";
+	mes "Você agora está bem perto de se tornar um Sacerdote.";
+	next;
+	mes "[Irmã Cecile]";
+	if(sex==1) mes "Se você quiser ser um Sacerdote, a última etapa será responder as minhas perguntas honestamente.";
+	if(sex==0) mes "Se você quiser ser um Sacerdotisa, a última etapa será responder as minhas perguntas honestamente.";
+	mes "Por favor, seja sincero e responda as minhas perguntas.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Certo, deixe-me fazer algumas perguntas.";
+	set PRIEST_Q2, 1;
+	next;
+L_Test3:
+	mes "[Irmã Cecile]";
+	mes "A parir de hoje, você deseja servir a Deus por toda a eternidade?";
+	next;
+	menu "Sim.",M_2a, "Não.",-;
+
+		mes "[Irmã Cecile]";
+		mes "Porque.. Porque você disse isso?...";
+		mes "Não acho que você seja a pessoa apropriada para ser um Sacerdote...";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Por favor, volte quando você estiver pronto para ser um Sacerdote.";
+		mes "Você não pode ser um Sacerdote no momento.";
+		close;
+
+	M_2a:
+
+	mes "[Irmã Cecile]";
+	mes "Você usará os poderes de Deus para benefício próprio?";
+	next;
+	menu "Sim",-, "Não.",M_2b;
+
+		mes "[Irmã Cecile]";
+		mes "Não, isso não funciona, se você usar os poderes de Deus da maneira que achar melhor, estará agindo como um ladrão.";
+		mes "Como você pode ser um bom Sacerdote pensando dessa maneira?";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Por favor, volte quando recuperar o juízo.";
+		mes "Esses pensamentos que corrompem as pessoas.";
+		close;
+
+	M_2b:
+
+
+	mes "[Irmã Cecile]";
+	mes "Você ajudará as outras pessoas que estiverem lutando?";
+	next;
+	menu "Sim.",M_2c, "Não.",-;
+
+		mes "[Irmã Cecile]";
+		mes "Isso é errado, quando alguem precisa de ajuda, nós devemos fazer o nosso melhor para ajuda-las.";
+		mes "Não importa quem seja, nossa função é ajudar qualquer um.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Ande um pouco.";
+		mes "e talvez você aprenda alguma coisa.";
+		close;
+	M_2c:
+
+	mes "[Irmã Cecile]";
+	mes "Você se sacrificará pelas outras pessoas?";
+	next;
+	menu "Sim.",M_2d, "Não.",-;
+
+		mes "[Irmã Cecile]";
+		mes "Não, isso não é o que Deus pensa.";
+		mes "Se nós podemos nos sacrificar para poder ajudar o mundo, então nós devemos fazer isso.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Ande um pouco e pense a respeito.";
+		mes "Sacrifício é fácil de se falar, mas difícil de se fazer.";
+		close;
+	M_2d:
+
+	mes "[Irmã Cecile]";
+	mes "Você tratará mal com as pessoas?";
+	next;
+	menu "Sim.",-, "Não.",M_2e;
+
+		mes "[Irmã Cecile]";
+		mes "Isso não está certo, Sacerdotes foram feitos para ajudar as pessoas.";
+		mes "Se você tratar mal as pessoas, você não merece ser um Sacerdote.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "mesmo sendo o melhor servo de Deus.";
+		mes "Você não tem o direito de maltratar as pessoas.";
+		close;
+
+	M_2e:
+
+	mes "[Irmã Cecile]";
+	mes "Você levará algum tipo de demônio para ajudar as pessoas nas batalhas?";
+	next;
+	menu "Yes.",-, "No.",M_2f;
+
+		mes "[Irmã Cecile]";
+		mes "Você não pode fazer isso.";
+		mes "Não importa se o demônio for bom ou ruim, Sacerdotes nunca devem falar com os demônios.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Mesmo achando estar fazendo um boa escolha, mas na verdade é uma péssima escolha.";
+		mes "Por favor, pense a respeito.";
+		close;
+
+	M_2f:
+
+	mes "[Irmã Cecile]";
+	mes "Se Deus quiser que você viva ou morra, vcoê o escutará?";
+	next;
+	menu "Sim.",M_2g, "Não.",-;
+
+		mes "[Irmã Cecile]";
+		mes "Se você gosta disso, você não será um Sacerdote.";
+		mes "Se Deus quiser q você morra, você terá que escuta-lo.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "E os Sacerdotes tem a habilidade de Ressucitar as pessoas.";
+		mes "Por favor, saia e pense o que a morte é para você.";
+		close;
+	M_2g:
+
+	mes "[Irmã Cecile]";
+	mes "Estou contente com o que você disse.";
+	mes "Por favor, me prometa que você nunca vai se esquecer do que você disse hoje.";
+	next;
+	menu "Eu prometo.",-, "Não.",M_2No;
+
+		mes "[Irmã Cecile]";
+		mes "Agora, você passou em todos os testes.";
+		mes "Por favor vá conversar com o Padre Thomas para ser um Sacerdote.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Por favor lembre-se de tudo que você disse hoje.";
+		mes "Que Deus te abençoe...";
+		set PRIEST_Q, 4;
+		set PRIEST_Q2, 0;
+		close;
+
+	M_2No:
+		mes "[Irmã Cecile]";
+		mes "..............";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Também não é assim, você ainda deseja ser um sacerdote ou não.";
+		mes "Você não pode ser um Sacerdote no momento.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Acho que você deveria voltar para o teste de disciplina...";
+		mes "Quando estiver pronto, volte.";
+		next;
+		mes "[Irmã Cecile]";
+		mes "Que Deus te abençoe...";
+		close;
+
+L_ReTest:
+	mes ".............";
+	next;
+	mes "[Irmã Cecile]";
+	mes "...Oh você voltou.";
+	mes "Espero que você possa ser honesto dessa vez.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Espero poder sentir sua sinceridade...";
+	mes "Por favor, responda honestamente.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Certo, vamos começar.";
+	next;
+	goto L_Test3;
+
+L_Test1:
+	mes "Oh, então você começou o teste de auto disciplina, bom trabalho.";
+	close;
+
+L_Test2:
+	if(PRIEST_Q2 == 1) goto L_Test2a;
+	mes "Você ainda não começou o segundo teste?.";
+	mes "Bem, eu não posso te dar qualquer tipo de detalhe a respeito desse teste.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Só posso dizer para você estar bem preparado e não se seduzir com nada...";
+	mes "Você precisa acreditar em você mesmo para completar esse teste.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Se quiser detalhes mais especificos vá falar com o Sacerdote no campo de treinamento.";
+	mes "Padre Thomas é uma pessoa bem gentil, ele irá te ajudar.";
+	close;
+
+L_Test2a:
+	mes "O treinamento é difícil, mas não desista.";
+	mes "Você precisa enfrentar qualquer desafio para se tornar um Sacerdote.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Se você conhece algum Sacerdote experiente, você pode perguntar se ele pode te ajudar no seu treinamento.";
+	mes "Eles será capazes de ajuda-lo a passar na primeira parte do segundo teste.";
+	next;
+	mes "[Irmã Cecile]";
+	mes "Que Deus te abençoe...";
+	mes "Quando completar o segundo teste, volte para cá.";
+	close;
+
+L_Done:
+	mes "Parabéns por terminar os testes. Por favor, vá até o Padre Thomas para poder ser um Sacerdote.";
+	close;
+}
+
+//==============================================================================
+// mapflag
+//==============================================================================
+job_prist.gat	mapflag	nomemo
+job_prist.gat	mapflag	noteleport
+job_prist.gat	mapflag	nosave	SavePoint
+job_prist.gat	mapflag	nopenalty
+job_prist.gat	mapflag	nobranch
+job_prist.gat	mapflag	noexp
+job_prist.gat	mapflag	noloot

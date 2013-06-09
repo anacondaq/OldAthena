@@ -1,0 +1,77 @@
+//===== Cronus Script ======================================= 
+//= Guia de Niflheim
+//===== By: ================================================== 
+//= Mehah
+//===== Versão Atual: ===================================== 
+//= 1.2
+//===== Comentarios Adicionais: ================================= 
+//= Traduzido por Mehah
+//============================================================
+
+
+//=====================================================================================
+niflheim.gat,186,190,5	script	Homem Vagante#guia_niff	798,{
+	mes "[Homem Vagante]";
+	mes "Por que você está nesta cidade assustadora? Eu adivinho você também se perdeu, heh.";
+	mes "Eu fui atraído aqui pelas árvores altas, mas ainda não pude achar meu longo caminho de volta...";
+	next;
+	mes "[Homem Vagante]";
+	mes "Mas os familiares ficaram arredor da aldeia, talvez possa ser útil ficar parado as vezes.";
+	next;
+	menu "Investigar locais",-,"Apagar Indicações",L_MENU_2,"Cancelar",L_end;
+
+		mes "[Homem Vagante]";
+		mes "O que você desejar saber?";
+		next;
+		menu "A Cabana da bruxa",-,"Loja de Equipamento",M_item,"Loja de arma",M_weapon,"Hospedaria",M_hotel,"Cancelar",L_cancel;
+
+		viewpoint 1,255,194,1,0xFF3366;
+		mes "[Homem Vagante]";
+		mes "Em Niflheim vive uma bruxa terrível,";
+		mes "Você a verá numa casa à direita, ^FF3366ali^000000,";
+		mes "era tão assustador, que fugi para direita depois de entrar!";
+		close;
+
+		M_item:  
+		viewpoint 1,219,198,2,0xCC6600;
+		mes "[Homem Vagante]";
+		mes "A loja de equipamento deve terminar ^CC6600aqui^000000";
+		mes "eles não vendem artigos disponível para o mundo externo.";
+		close;
+
+		M_weapon:
+		viewpoint 1,219,170,3,0x66FF33;
+		mes "[Homem Vagante]";
+		mes "A loja de arma deve terminar ^66FF33aqui^000000";
+		mes "eles não vendem artigos disponível para o mundo externo.";
+		close;
+
+		M_hotel:
+		viewpoint 1,189,210,4,0x3366FF;
+		mes "[Homem Vagante]";
+		mes "^3366FFIsso^000000 seria a hospedaria,";
+		mes "ocasionalmente os espíritos dão uma festa lá.";
+		close;
+
+		L_cancel:
+		mes "[Homem Vagante]";
+		mes "Removi todas as indicações do Minimapa";
+		mes "volte e fale novamente comigo.";
+		close;
+  
+	L_MENU_2:
+	viewpoint 2,255,194,1,0xFF3366;
+	viewpoint 2,219,198,2,0xCC6600;
+	viewpoint 2,219,170,3,0x66FF33;
+	viewpoint 2,189,210,4,0x3366FF;
+	mes "[Homem Vagante]";
+	mes "Eu removi todas as indicações,";
+	mes "Se você ainda precisa saber sobre qualquer indicação, volta e fale novamente comigo.";
+	close;
+
+	L_end: 
+	mes "[Homem Vagante]";
+	mes "Você passeando sozinho é perigoso...";
+	mes "por favor, tome cuidado.";
+	close;
+}

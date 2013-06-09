@@ -1,0 +1,265 @@
+//===== Cronus Script ======================================== 
+//= Script Super aprendiz
+//===== Por: =================================================
+//= DarkChild
+//===== Versão Atual: ======================================== 
+//= 1.7
+//===== Descrição: =========================================== 
+//= Muda a classe para Super aprendiz e aluga carro
+//===== Changelog: =========================================== 
+//= 1.7 Traduzido [DarkAngel]
+//============================================================
+
+aldeba_in.gat,223,167,3	script	Tozel	709,{
+	if(SUPNOV_Q == 1) goto L_Start2;
+	if(BaseJob == 23) goto L_Twice;
+	if(Class != 0) goto L_Otherjob;
+	mes "[Tozel]";
+	mes "Ola, Aprendiz!";
+	mes "Você está gostando de ser aprendiz, a classe preferida pelos homens comuns?";
+	next;
+	mes "[Tozel]";
+	mes "Você gostaria de fazer parte da Guilda dos Aprendizes e adicionar o seu personagem aos comuns";
+	mes "Com seus talentos comuns para fazer tarefas comuns?";
+	next;
+	mes "[Tozel]";
+	mes "Se você se juntar a nós, Eu vou mudar a sua classe de Aprendiz para a altamente hábil Super Aprendiz!";
+	mes "Como isso lhe parece?";
+	next;
+	menu "Okeys!",-,"Super Aprendiz é um Super Idiota",L_Stupid,"Bom, gostaria de mais informações...",L_Well;
+	if(JobLevel < 10) goto L_LowSkill;
+	if(BaseLevel < 45) goto L_LowLevel;
+	if(SkillPoint != 0) goto L_StillSk;
+	mes "[Tozel]";
+	mes "Maravilhoso!";
+	mes "Você está a caminho de se tornar um indivíduo incomun entre os comuns.";
+	next;
+	mes "[Tozel]";
+	mes "Comum é uma grande palavra, não é?";
+	next;
+	mes "[Tozel]";
+	mes "Só por que você se decidiu tornar membro da Guilda dos Aprendizes Isso não significa que seja automatico.";
+	mes "Aqui estão os requerimentos necessários que você deve ter.";
+	next;
+	mes "[Tozel]";
+	mes "Torne-se da guilda dos homens comuns, você só precisa me trazer esses itens comuns como inscrição.";
+	mes "Então, vá e encontre trinta de cada um dos itens: ";
+	mes "   ^FF0000Muco Pegajoso^000000 and";
+	mes "   ^FF0000Resina^000000.";
+   	next;
+	mes "[Tozel]";
+	mes "Uma vez que você colete esse número  desses itens comuns, volte a essa guilda dos homens comuns.";
+	set SUPNOV_Q,1;
+	close;
+
+L_Stupid:
+	mes "[Tozel]";
+	mes "Hum... Essa atitude é a atitude compartilhada por muitos criminosos e outros tipos de marginais.";
+	mes "...Eles não entendem o ganho de serem parte do grupo comum de amigos.";
+	next;
+	mes "[Tozel]";
+	mes "É claro, pessoas costumam mudar de idéia facilmente.";
+	mes "Se você quizer, por favor me avise.";
+	close;
+
+L_Well:
+	mes "[Tozel]";
+	mes "Oh, você quer saber mais sobre a nossa guilda, eh?";
+	mes "Eu ficarei feliz em explicar!";
+	next;
+	mes "[Tozel]";
+	mes "Deixe eu te contar sobre Kima, a nossa fundadora.";
+	mes "Kima fundou essa guilda por que nossos ancestrais não tinha lugar para ficar.";
+	next;
+	mes "- Tozel fala por dez minutos. - ";
+	mes "- Seu tom é tão comum que chega a chatear você e dar sono. -";
+	next;
+	mes "[Tozel]";
+	mes "... De qualquer forma, a guilda dos Novatos porperou bastante desde a sua fundação.";
+	mes "Nós nos orgulhamos do nosso slogan 'Homens Comuns, Objetivos Comuns, Sonhos Comuns'!";
+	close;
+
+L_Start2:
+	if(countitem(938) < 30) goto L_ItemError;
+	if(countitem(907) < 30) goto L_ItemError;
+	mes "[Tozel]";
+	mes "E o nosso objetivo é... ser comum, e isto é bom demais para nós!";
+	mes "Bem-vindo à Guilda dos Novatos";
+	next;
+	mes "[Tozel]";
+	mes "De acordo com aquilo que eu te disse, Eu o tornarei um Super Aprendiz.";
+	mes "Você está pronto?!";
+	next;
+	menu "Huh?!",-,"Talvez?!",-;
+	mes "- O comportamento incomum de Tozel's o pega de surpreza, -";
+	mes "- deixando você sem fala! -";
+	next;
+	callfunc "Job_Change",Job_SuperNovice;
+	delitem 938,30;
+	delitem 907,30;
+	getitem 2339,1;
+	callfunc "F_ClearJobVar";
+	mes "[Tozel]";
+	mes "Hahahah!  por que você está surpreso?!";
+	mes "Só por que nós somos comuns não significa que precisamos agir assim o tempo todo!";
+	next;
+	mes "[Tozel]";
+	mes "Então, está pronto para sua nova vida como Super Aprendiz!";
+	next;
+	mes "[Tozel]";
+	mes "Agora você faz parte do legado de Kima!";
+	mes "Por favor, continue com o seu bom (porém comum) nome.";
+	close;
+
+L_LowSkill:
+	mes "[Tozel]";
+	mes "Bom...parece que o seu nivel é muito comum no momento.";
+	mes "Você precisa de ^0000FFno minimo 10^000000 em classe para poder se juntar a nós.";
+	close;
+
+L_LowLevel:
+	mes "[Tozel]";
+	mes "Bom...parece que o seu nivel é muito comum no momento.";
+	mes "Você precisa de ^0000FFno minimo 45^000000 de nível para poder se juntar a nós.";
+	close;
+
+L_StillSk:
+	mes "[Tozel]";
+	mes "Bom...parece que você ainda tem algum pontos de habilidade para distribuir.";
+	mes "Você precisa de ^0000FFdistribuir os seus pontos^000000 de habilidade para poder se juntar a nós.";
+	close;
+
+L_ItemError:
+	mes "[Tozel]";
+	mes "Você esqueceu o que você preciza encontrar?";
+	mes "Eu vo dizer de novo.";
+	next;
+	mes "[Tozel]";
+	mes "Você precisa encontrar trinta";
+	mes "^FF0000  Muco Pegajoso^000000 e";
+	mes "^FF0000  Resina^000000.";
+	close;
+
+L_Twice:
+	mes "[Tozel]";
+	mes "Você é um membro da Guilda dos Aprendizes agora.";
+	mes "Aqui não há a necessidade de ter talentos excepcionais aqui.";
+	mes "Nossa vigilância pelo comum é todo o que precisamos.";
+	next;
+	mes "[Tozel]";
+	mes "Agora vá, e viva a sua comum e nada excepcional vida, em respeito a nossa vida.";
+	close;
+L_Otherjob:
+	mes "[Tozel]";
+	mes "Hey! Você não é um homem que carrega a herança comum!";
+	mes "Eu sou Tozel, o mestre da Guilda dos Aprendizes.";
+	next;
+	mes "[Tozel]";
+	mes "Este lugar é para pessoas que tem objetivos comuns,";
+	mes "crenças comuns, vidas comuns.";
+	mes "Para você, uma pessoa incomum, este lugar é um anatema.";
+	next;
+	mes "[Tozel]";
+	mes "Você não tem lugar na nossa sociedade comum. Me desculpe.";
+	close;
+}
+
+// -- Totaly Useless :) --
+aldeba_in.gat,216,169,5	script	Serei	86,{
+	if(BaseJob == 23) goto L_Supernovice;
+	if(BaseJob != 0) goto L_Otherjob;
+	mes "[Serei]";
+	mes "Você é muito comum.";
+	mes "Um homem comum que está alegre com a sua vida.";
+	mes "Você poderia considerar se juntar a guilda dos Aprendizes.";
+	next;
+	mes "[Serei]";
+	mes "VAI! APRENDIZ!";
+	mes "Hahahahahahahaha!";
+	close;
+
+L_Supernovice:
+	mes "[Serei]";
+	mes "Yaaaaaaaaaaaaaaaaaaaaaaaay!";
+	mes "Você é um membro da guilda dos Aprendizes! Docinho!";
+	next;
+	mes "[Serei]";
+	mes "Isso é ÓTIMO!";
+	mes "Você está tentando extender o legado da guilda de insignificantes?";
+	next;
+	mes "[Serei]";
+	mes "Heuaheuaheau, até mais Super APRENDIZ!";
+	close;
+
+L_Otherjob:
+	mes "[Serei]";
+	mes "Oh não!";
+	mes "Você é um daqueles que rejeitaram o jeito comum de viver!";
+	mes "Você é perigoso para aqueles que querem o caminho do comum!";
+	mes "Ahhhh!";
+	close;
+}
+
+
+// -- Car Rental --
+aldebaran.gat,54,238,5	script	Kafra#kafra_sup	117,{
+	if(BaseJob != 23) goto L_Otherjob;
+	if(checkcart() == 1) goto L_GotCart;
+	mes "[Kafra]";
+	mes "Oh, um Super Novice!";
+	mes "Você não ficaria chateado se as outras Kafras não alugasse para você um carinho, né??";
+	mes "Sem problema!";
+	next;
+	mes "[Kafra]";
+	mes "Eu vou te alugar um carrinho, mas tente manter isso em segredo,";
+	mes "Por que nós temos ordens do gerente das kafras de não alugar carrinhos para nenhum Super Aprendiz.";
+	next;
+	mes "[Kafra]";
+	mes "Por favor, serão ^FF00001900 zeny^000000 para você usar um carrinho.";
+	next;
+	mes "[Kafra]";
+	mes "Você precisa da habilidade de Alugar Carrinho para você utilizar.";
+	mes "Se você não tem essa habilidade,";
+	mes "você não será capaz de usar o carinho e tambem perderá o seu dinheiro.";
+	mes "Você quer alugar um carrinho?";
+	next;
+	menu "Sim",-,"Não",L_End;
+	mes "[Kafra]";
+	mes "Como eu estou alugando um carrinho em segredo,";
+	mes "Eu não posso assegurar que você tenha a habilidade Alugar Carrinho.";
+	mes "Se você não tem essa habilidade, você não será capaz de usar o carinho e tambem perderá o seu dinheiro.";
+	mes "Você quer alugar um carrinho?";
+	next;
+	menu "Sim! Eu te disse da primeira vez!",-,"Uhhh...espera um minuto...",L_End;
+	if(Zeny < 1900) goto L_Error;
+	set Zeny,Zeny-1900;
+	if(getskilllv(39)==0) goto L_End;
+	setcart;
+	mes "[Kafra]";
+	mes "Obrigado por utilizar os serviços da Kafra, mesmo que seja por debaixo dos panos.";
+	mes "Hehehehehe...";
+	close;
+
+L_Error:
+	mes "[Kafra]";
+	mes "Hummm. Parece que você está sem fundos.";
+	close;
+
+L_End:
+	mes "[Kafra]";
+	mes "Obrigado por ter vindo.";
+	mes "Por favor, volte sempre.";
+	close;
+
+L_GotCart:
+	mes "[Kafra]";
+	mes "Olá! Caro Super Aprendiz.";
+	mes "Me desculpe mas, você já tem um carro!";
+	close;
+
+L_Otherjob:
+	mes "[Kafra]";
+	mes "Me desculpe mas, não estou falando com clientes agora.";
+	mes "Por favor vá e fale com as outras assistentes da Kafra, sim.";
+	close;
+}
