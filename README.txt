@@ -19,12 +19,4 @@ Créditos ao grupo de desenvolverdores do eAthena e Cronus por seu código fonte.
 eAthena http://eathena.ws
 Cronus http://cronus-emulator.com
 
-Todos os direitos reservados
-
-
-Changelog:
-
-9/6/2013
-	*ajustado os as flechas que não funcionavam corretamente da base de dados Cronus
-	*Correção de portais
-	*Iniciado reposiório das modificações Pré-Heritage ,
+Todos os direitos reservados.
