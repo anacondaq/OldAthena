@@ -1,26 +1,12 @@
-//===== Cronus Script ======================================== 
-//= Base de Treinamento para Aprendiz
-//===== Por: =================================================
-//= Mehah
-//===== Versão Atual: ======================================== 
-//= 1.1.1b
-//===== Descrição: =========================================== 
-//= Script baseado no Oficial bRO
-//= 100%
-//===== Changelog: =========================================== 
-//= 1.0 Terminado o Ultimo NPC [Mehah]
-//= 1.0.1 Fix Geffen em Instrutor final [Mehah]
-//= 1.0.2 Fix Color em Quadro de aviso [Mehah]
-//= 1.0.2.5 Add separador em cada NPC [Mehah]
-//= 1.0.3 Fix Base LVL [Mehah]
-//= 1.0.4 Arrumado alguns erros de ortografia
-//= 1.0.5 Fix bug em Zion no BaseExp thx Rafoka [Mehah]
-//= 1.0.6 Arrumado os erros de ortografia que faltava [Mehah]
-//= 1.1b Adicionado percentheal em Ajudante thx Ramon [Mehah]
-//= 1.1.1b Retirado Goto(indesejáveis) [Mehah]
-//============================================================
+//-----------------------------------------------------------
+//   ____  _     _         _   _                      
+//  / __ \| |   | |   /\  | | | |                     
+// | |  | | | __| |  /  \ | |_| |__   ___ _ __   __ _ 
+// | |  | | |/ _` | / /\ \| __| '_ \ / _ \ '_ \ / _` |
+// | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
+//  \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
+//-----------------------------------------------------------
 
-//============================================================
 new_1-1.gat,66,114,4	script	Quadro de avisos	111,{
 	mes "^FF0000=================================^000000";
 	mes "^E40CAA[Bem vindos]^CC0000 Ao Campo de ^FF9000Treinamento^7FFF00 de Aprendizes^E40CAA [Bem vindos]^000000";

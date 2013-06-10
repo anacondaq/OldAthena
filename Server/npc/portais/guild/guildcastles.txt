@@ -1,21 +1,12 @@
-//===== Athena Script ========================================
-//= Guild Castles Warp Script
-//===== By: ==================================================
-//= Athena (1.0)
-//===== Current Version: =====================================
-//= 2.2
-//===== Compatible With: =====================================
-//= Any Athena Version
-//===== Description: =========================================
-//= Warp Points for Al de Baran, Payon, Prontera & Geffen
-//= Guild Castles
-//===== Additional Comments: =================================
-//= Split off npc_warp.txt
-//= fixed aldg504-1 warp [Lupus]
-//= 2.0 Added Novice Guilds warps, optimized aldg408r warp [Lupus]
-//= 2.1 Fixed some warps positions [Yor]
-//= 2.2 Changed all breaks to end as per the new script engine. [Skotlex]
-//============================================================
+//-----------------------------------------------------------
+//   ____  _     _         _   _                      
+//  / __ \| |   | |   /\  | | | |                     
+// | |  | | | __| |  /  \ | |_| |__   ___ _ __   __ _ 
+// | |  | | |/ _` | / /\ \| __| '_ \ / _ \ '_ \ / _` |
+// | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
+//  \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
+//-----------------------------------------------------------
+
 
 
 //Al de Baran Guild Castles Map Connection
