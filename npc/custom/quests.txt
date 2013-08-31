@@ -5,6 +5,3 @@ OnTouch:
 	showevent 1,1;
 }
 
-function    script  Q_PUPA{
-	        
-}

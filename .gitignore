@@ -31,6 +31,8 @@
 /mapcache
 /nbproject
 
+/conf
+
 # /3rdparty/libconfig/
 /3rdparty/libconfig/Makefile
 /3rdparty/libconfig/*.o

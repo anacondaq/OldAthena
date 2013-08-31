@@ -853,10 +853,7 @@ int skill_additional_effect (struct block_list* src, struct block_list *bl, uint
 	case SM_BASH:
 		if( sd && skill_lv > 5 && pc_checkskill(sd,SM_FATALBLOW)>0 ){
 			//BaseChance gets multiplied with BaseLevel/50.0; 500/50 simplifies to 10 [Playtester]
-			
-
-			//status_change_start(src,bl,SC_STUN,(skill_lv-5)*sd->status.base_level*10,
-			status_change_start(src,bl,SC_STUN,(5*(skill_lv-5)), //FORMULA OT
+			status_change_start(src,bl,SC_STUN,(skill_lv-5)*sd->status.base_level*10,
 				skill_lv,0,0,0,skill_get_time2(SM_FATALBLOW,skill_lv),0);
 		}
 		break;
@@ -944,14 +941,11 @@ int skill_additional_effect (struct block_list* src, struct block_list *bl, uint
 		break;
 
 	case TF_SPRINKLESAND:
-		//sc_start(src,bl,SC_BLIND,20,skill_lv,skill_get_time2(skill_id,skill_lv));
-		sc_start(src,bl,SC_BLIND,15,skill_lv,skill_get_time2(skill_id,skill_lv)); //FORMULA OT
+		sc_start(src,bl,SC_BLIND,20,skill_lv,skill_get_time2(skill_id,skill_lv));
 		break;
 
 	case TF_THROWSTONE:
-		
-		//sc_start(src,bl,SC_STUN,3,skill_lv,skill_get_time(skill_id,skill_lv));
-		sc_start(src,bl,SC_STUN,5,skill_lv,skill_get_time(skill_id,skill_lv)); //FORMULA OT
+		sc_start(src,bl,SC_STUN,3,skill_lv,skill_get_time(skill_id,skill_lv));
 		sc_start(src,bl,SC_BLIND,3,skill_lv,skill_get_time2(skill_id,skill_lv));
 		break;
 
@@ -10175,7 +10169,6 @@ int skill_castend_pos2(struct block_list* src, int x, int y, uint16 skill_id, ui
 	case AM_SPHEREMINE:
 	case AM_CANNIBALIZE:
 		{
-
 			int summons[5] = { 1589, 1579, 1575, 1555, 1590 };
 			//int summons[5] = { 1020, 1068, 1118, 1500, 1368 };
 			int class_ = skill_id==AM_SPHEREMINE?1142:summons[skill_lv-1];
@@ -10905,8 +10898,7 @@ struct skill_unit_group* skill_unitsetting (struct block_list *src, uint16 skill
 
 	case PR_SANCTUARY:
 	case NPC_EVILLAND:
-		//val1=(skill_lv+3)*2;
-		val1=(skill_lv+3)*2; //FORMULA OT
+		val1=(skill_lv+3)*2;
 		break;
 
 	case WZ_FIREPILLAR:
@@ -11010,12 +11002,8 @@ struct skill_unit_group* skill_unitsetting (struct block_list *src, uint16 skill
 		}
 		break;
 	case DC_DONTFORGETME:
-		//val1 = status->dex/10 + 3*skill_lv + 5; // ASPD decrease
-		//val2 = status->agi/10 + 3*skill_lv + 5; // Movement speed adjustment.
-		//FORMULA OT
 		val1 = status->dex/10 + 3*skill_lv + 5; // ASPD decrease
 		val2 = status->agi/10 + 3*skill_lv + 5; // Movement speed adjustment.
-
 		if(sd){
 			val1 += pc_checkskill(sd,DC_DANCINGLESSON);
 			val2 += pc_checkskill(sd,DC_DANCINGLESSON);
@@ -11061,9 +11049,7 @@ struct skill_unit_group* skill_unitsetting (struct block_list *src, uint16 skill
 		val1 = 25 + 11*skill_lv; //Exp increase bonus.
 		break;
 	case BD_SIEGFRIED:
-		//val1 = 55 + skill_lv*5;	//Elemental Resistance
-		val1 = 30 + skill_lv*10; //FORMULA OT
-
+		val1 = 55 + skill_lv*5;	//Elemental Resistance
 		val2 = skill_lv*10;	//Status ailment resistance
 		break;
 	case WE_CALLPARTNER:
@@ -11699,14 +11685,6 @@ int skill_unit_onplace_timer (struct skill_unit *src, struct block_list *bl, uns
 				case WZ_STORMGUST: //SG counter does not reset per stormgust. IE: One hit from a SG and two hits from another will freeze you.
 					if (tsc)
 						tsc->sg_counter++; //SG hit counter.
-
-							//-----OT FORMULA---
-							if (tsc && bl->id != sg->group_id) {	// Reseta o acúmulo de hits quando uma nova Nevasca é lançada [Old-Times].
-								sg->group_id = bl->id;
-								tsc->sg_counter = 0;
-							}
-							//------------------
-
 					if (skill_attack(skill_get_type(sg->skill_id),ss,&src->bl,bl,sg->skill_id,sg->skill_lv,tick,0) <= 0 && tsc)
 						tsc->sg_counter=0; //Attack absorbed.
 				break;
@@ -12585,10 +12563,7 @@ int skill_check_condition_char_sub (struct block_list *bl, va_list ap)
 			case PR_BENEDICTIO: {
 				uint8 dir = map_calc_dir(&sd->bl,tsd->bl.x,tsd->bl.y);
 				dir = (unit_getdir(&sd->bl) + dir)%8; //This adjusts dir to account for the direction the sd is facing.
-				
-				//if ((tsd->class_&MAPID_BASEMASK) == MAPID_ACOLYTE && (dir == 2 || dir == 6) //Must be standing to the left/right of Priest.
-				
-				if((tsd->class_== MAPID_ACOLYTE || tsd->class_== MAPID_PRIEST ) && (dir == 2 || dir == 6) // Holy  OT
+				if ((tsd->class_&MAPID_BASEMASK) == MAPID_ACOLYTE && (dir == 2 || dir == 6) //Must be standing to the left/right of Priest.
 					&& sd->status.sp >= 10)
 					p_sd[(*c)++]=tsd->bl.id;
 				return 1;
