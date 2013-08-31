@@ -14,7 +14,7 @@ party booking, pin code...).
 
 Créditos ao grupo de desenvolverdores do eAthena e Cronus por seu código fonte.
 
-rAthena http://http://rathena.org
+rAthena http://rathena.org
 eAthena http://eathena.ws
 Cronus http://cronus-emulator.com
 
