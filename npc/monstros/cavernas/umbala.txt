@@ -1,0 +1,22 @@
+//-----------------------------------------------------------
+//   ____  _     _         _   _                      
+//  / __ \| |   | |   /\  | | | |                     
+// | |  | | | __| |  /  \ | |_| |__   ___ _ __   __ _ 
+// | |  | | |/ _` | / /\ \| __| '_ \ / _ \ '_ \ / _` |
+// | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
+//  \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
+//-----------------------------------------------------------
+
+//Caverna01
+um_dun01.gat,0,0,0,0	monster	Atirador de Pedras	1495,10,0,0,0 
+um_dun01.gat,0,0,0,0	monster	Golem de Madeira	1497,3,0,0,0
+um_dun01.gat,0,0,0,0	monster	Guerreiro Wootan	1499,30,0,0,0
+um_dun01.gat,0,0,0,0	monster	Percevejo	1174,20,0,0,0
+um_dun01.gat,0,0,0,0	monster	Poeira	1114,20,0,0,0
+
+//Caverna02
+um_dun02.gat,0,0,0,0	monster	Artilheiro Wootan	1498,10,0,0,0
+um_dun02.gat,0,0,0,0	monster	Atirador de Pedras	1495,20,0,0,0
+um_dun02.gat,0,0,0,0	monster	Dríade	1493,30,0,0,0
+um_dun02.gat,0,0,0,0	monster	Golem de Madeira	1497,30,0,0,0
+um_dun02.gat,0,0,0,0	monster	Guerreiro Wootan	1499,20,0,0,0

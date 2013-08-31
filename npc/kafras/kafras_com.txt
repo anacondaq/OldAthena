@@ -1,0 +1,43 @@
+//-----------------------------------------------------------
+//   ____  _     _         _   _                      
+//  / __ \| |   | |   /\  | | | |                     
+// | |  | | | __| |  /  \ | |_| |__   ___ _ __   __ _ 
+// | |  | | |/ _` | / /\ \| __| '_ \ / _ \ '_ \ / _` |
+// | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
+//  \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
+//-----------------------------------------------------------
+
+comodo.gat,200,148,4	script	Funcionária Kafra#kcmd1	721,{
+	cutin "kafra_07",2;
+	setarray @wrpD$[0], "Morroc", "Ilha do Farol, Pharos", "Umbala";
+	setarray @wrpP[0], 1800, 1200, 1800;
+	set @wrpC$[0], @wrpD$[0]+" -> "+@wrpP[0];
+	set @wrpC$[1], @wrpD$[1]+" -> "+@wrpP[1];
+	set @wrpC$[2], @wrpD$[2]+" -> "+@wrpP[2];
+	set @wrpC$[3], "Cancel";
+	set @wrpC$[4], "";
+	set @wrpC$[5], "";
+	set @wrpC$[6], "";
+	callfunc "F_Kafra",0,0,1;
+
+	M_Save:
+		savepoint "comodo.gat",204,143;
+		callfunc "F_KafEnd",0,1;
+}
+cmd_fild07.gat,135,134,4	script	Funcionária Kafra#kcmd	721,{
+	cutin "kafra_07",2;
+	setarray @wrpD$[0], "Comodo", "Morroc";
+	setarray @wrpP[0], 1200, 1800;
+	set @wrpC$[0], @wrpD$[0]+" -> "+@wrpP[0];
+	set @wrpC$[1], @wrpD$[1]+" -> "+@wrpP[1];
+	set @wrpC$[2], "Cancel";
+	set @wrpC$[3], "";
+	set @wrpC$[4], "";
+	set @wrpC$[5], "";
+	set @wrpC$[6], "";
+	callfunc "F_Kafra",0,0,1;
+
+	M_Save:
+		savepoint "cmd_fild07.gat",127,134;
+		callfunc "F_KafEnd",0,1;
+}

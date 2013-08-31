@@ -1,0 +1,7 @@
+// Item Usage Restriction Configuration File
+// Defines if an item cannot be used under certain circumstances
+// Syntax: <item_id>, <flag>, <group_id_override>
+// flag:
+//	1 = Cannot use item while sitting
+//	X = more to come soon [TODO]
+// group_id_override: group id necessary to override this setting

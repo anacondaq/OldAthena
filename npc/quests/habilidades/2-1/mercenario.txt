@@ -1,0 +1,53 @@
+//-----------------------------------------------------------
+//   ____  _     _         _   _                      
+//  / __ \| |   | |   /\  | | | |                     
+// | |  | | | __| |  /  \ | |_| |__   ___ _ __   __ _ 
+// | |  | | |/ _` | / /\ \| __| '_ \ / _ \ '_ \ / _` |
+// | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
+//  \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
+//-----------------------------------------------------------
+//============================================================
+// Mercenário - SONIC ACCELERATION + THROW VENOM KNIFE
+//============================================================
+in_moc_16.gat,14,21,3	script	Kiltin	884,{
+	mes "[Kiltin]";
+	if(BaseJob!=Job_Assassin) goto L_nosin;
+	if(getskilllv(1003) && getskilllv(1004)) goto L_alreadyhave;
+
+	mes "Eu posso ensinar tudo que eu sei,";
+	mes "mas você precisa roubar algumas coisas para mim:";
+	mes "3 Safiras";
+	mes "1 Rubi";
+	next;
+	
+	mes "[Kiltin]";
+	mes "Me deixe conferir.";
+	next;
+	
+	if(countitem(726)<3 || countitem(723)<1) goto L_noitems;//Items: Safira, Rubi,
+	delitem 726, 3;//Items: Safira
+	delitem 723, 1;//Items: Rubi,
+
+	mes "[Kiltin]";
+	mes "Bem, to vendo que você trouxe o meu item, então vou ensina minha técnica.";
+	skill 1003,1,0;
+	skill 1004,1,0;
+	close;
+	
+L_noitems:
+	mes "[Kiltin]";
+	mes "Você não possui os items que eu preciso.";
+	mes "Volte quando tiver todos os items exigidos.";
+	close;
+		
+L_nosin:
+	mes "Desculpe, mas eu estou em serviço do Shadowmen.";
+	emotion e_gasp;
+	close;
+
+L_alreadyhave:
+	mes "Eu já o ensinei";
+	mes "tudo que eu sei...";
+	close;
+}
+

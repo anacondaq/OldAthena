@@ -1,0 +1,547 @@
+//-----------------------------------------------------------
+//   ____  _     _         _   _                      
+//  / __ \| |   | |   /\  | | | |                     
+// | |  | | | __| |  /  \ | |_| |__   ___ _ __   __ _ 
+// | |  | | |/ _` | / /\ \| __| '_ \ / _ \ '_ \ / _` |
+// | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
+//  \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
+//-----------------------------------------------------------
+// Cidade de niflheim
+//-----------------------------------------------------------
+
+//prontera.gat,164,161,4	script	Traveler::NifTrav	68,{
+//	mes "[Viajante]";
+//	mes "Eu vim através de algumas coisas estranhas de meu tempo. Coisas que só vendo para crer. Você ja ouviu falar de Niffleheim, a cidade dos mortos??";
+//	next;
+//	menu "Mostre para mim por favor...",M_mes, "hm.. nunca..",-;
+//
+//	mes "[Viajante]";
+//	mes "Hm... Uma escolha sabia...";
+//	close;
+//M_mes:
+//	warp "niflheim.gat",202,171;
+//	close;
+//}
+//-	script	EDNifTrav	-1,{
+//OnInit:
+//OnMinute00:
+//	disablenpc "NifTrav";
+//	end;
+//OnMinute56:
+//	enablenpc "NifTrav";
+//	end;
+//}
+
+niflheim.gat,52,174,3	script	Kirz#kirz_niff	796,{
+	mes "[Kirz]";
+	mes "Seres humanos não são bem vindos aqui!";
+	mes "Coisas vivas.... Grr...";
+	mes "Você pode passar...";
+	close;
+}
+
+niflheim.gat,213,221,0	script	Spirit::spirits	802,{
+	mes "[Espirito]";
+	mes "Bem vindo ao meu mundo";
+	mes "Esse lugar que nos chamamos de...";
+	mes "Niflheim....";
+	percentheal -85,-85;
+	close;
+}
+
+niflheim.gat,39,146,0	duplicate(spirits)	Spirit#sipirit_nif2	802
+niflheim.gat,95,61,0	duplicate(spirits)	Spirit#sipirit_nif3	802
+niflheim.gat,313,187,0	duplicate(spirits)	Spirit#sipirit_nif4	802
+niflheim.gat,212,264,0	duplicate(spirits)	Spirit#sipirit_nif5	802
+niflheim.gat,247,72,0	duplicate(spirits)	Spirit#sipirit_nif6	802
+niflheim.gat,130,176,0	duplicate(spirits)	Spirit#sipirit_nif7	802
+niflheim.gat,173,110,0	duplicate(spirits)	Spirit#sipirit_nif8	802
+niflheim.gat,182,167,0	duplicate(spirits)	Spirit#sipirit_nif9	802
+
+niflheim.gat,184,199,5	script	Menininha#menininha_nif	793,{
+	mes "[Sairin]";
+	if(niflheimlost2 == 1) goto L_thanks;
+	if(niflheimlost == 1) goto L_foundhim;
+	if(lostgirl == 1) goto L_sure2;
+	mes "Senhor. Pode me ajudar por favor?";
+	if(BaseJob==Job_Novice) mes "Oh... Você esta perdido também..."; //Exploit fix
+	if(BaseJob==Job_Novice) close;
+	next;
+	menu "Sim",-, "Não",M_no;
+
+	mes "[Sairin]";
+	mes "Meu amigo e eu estavamos passeando por lugares novos.";
+	next;
+	mes "[Sairin]";
+	mes "Derrepente achei uma boneca, eu peguei-a e ela se transformou em um fantasma!";
+	next;
+	mes "[Sairin]";
+	mes "Eu gritei e saí correndo! Mas quando parei de correr vim parar nessa cidade extranha...";
+	next;
+	mes "[Sairin]";
+	mes "Ninguem aqui quiz me ajudar. E há fantasmas em toda a parte! Você pode me ajudar a encontrar o meu amigo?";
+	next;
+	menu "Claro!",-, "Não",M_no;
+L_sure2:
+	set lostgirl,1;
+	mes "Então se encontra-lo pelos campos de Niflhein, diga para ele onde eu estou!";
+	close;
+
+L_foundhim:
+	mes "Você encontrou ele?";
+	mes "Oh! Muito obrigado!";
+	mes "Por favor, pegue isso como forma de minha gratidão.";
+	getitem 642,1;//Items: Book of Devil,
+	set niflheimlost2,1;
+	close;
+L_thanks:
+	mes "Muito obrigado novamente";
+M_no:
+	close;
+}
+
+nif_fild01.gat,213,268,5	script	Menininho#menininho_niff	797,{
+	mes "[Marius]";
+	if(niflheimlost == 1) goto L_alreadydone;
+	if(lostgirl == 1) goto L_sure2;
+	mes "Sairin...Cade Você?";
+	close;
+L_alreadydone:
+	mes "Obrigado por ter nos ajudado!";
+	close;
+L_sure2:
+	mes "Quem é Você?";
+	mes "...";
+	mes "Você achou Sairin?";
+	mes "Ela correu para Niflhein...";
+	next;
+	set niflheimlost,1;
+	mes "[Marius]";
+	mes "Você pode falar onde ela esta?";
+	mes "Eu sou um pouco lerdo, e seria importante achar ela...";
+	menu "Sim",L_alreadydone, "Não",-;
+
+	close;
+}
+
+niflheim.gat,195,211,5	script	Gigantia	796,{
+	mes "[Gigantia]";
+	mes "O Senhor da Morte vê tudo...";
+	close;
+}
+
+niflheim.gat,153,215,3	script	Feline	794,{
+	mes "[Feline]";
+	mes "O que faz nessa vila perigosa?";
+	mes "Saida desse lugar rapidamente...";
+	close;
+}
+
+nif_in.gat,16,27,1	script	Galo Morto#gniff	800,{
+	mes "[Morto Vivo]";
+	mes "Eu fui comido por seres humanos quando era vivo,";
+	mes "Agora vou comê-lo! *NHack!*";
+	mes "Ah! Não posso acreditar que estou vivo após a morte! hahaha!";
+	percentheal -5,0;
+	close;
+}
+
+nif_in.gat,16,30,4	script	Morcego Vampiro#vniff	799,{
+	mes "[Morcego Vampiro]";
+	mes "Vivo ou morto.. Sangue humano!";
+	mes "É sempre o que me da mais gosto!";
+	mes "O que? Você quer seu sangue..";
+	mes "sugado por mim??? *nhack* Muito bom!";
+	percentheal -5,0;
+	close;
+}
+
+nif_in.gat,156,93,5	script	Criança#kid_niff	793,{
+	mes "[Anna]";
+	mes "Onde é esse lugar? Eu só lembro que acordei aqui.";
+	mes "e encontrei... mamãe...";
+	mes "Você viu minha mãe, ein?? ...";
+	mes "Eu quero ir para casa...";
+	next;
+	menu "Sobre a Bruxa...",L_Wizzard,"Sobre a Maldição...",L_Curse,"Parar de conversar",L_end;
+
+L_Wizzard:
+	mes "[Anna]";
+	mes "Uma Bruxa? Eu não conheço nenhuma Bruxa...";
+	mes "embora eu tenha lido sobre isso em alguns livros,";
+	mes "Mas não sei se é real,";
+	mes "se for real deve ser muito assustador...";
+	next;
+	mes "[Anna]";
+	mes "Porque esta tão frio? ";
+	if (sex == 1) mes "Você não esta com frio amigo?";
+	if (sex == 0) mes "Você não esta com frio amiga?";
+	mes "Eu tenho saudades do calor da minha casa...";
+	mes "Você pode me ajudar? Hmmm? Hmmm?";
+	close;
+   
+L_Curse:
+	mes "[Anna]";
+	mes "Maldição... Minha avó me disse";
+	mes "tem uma maneira de evitar a maldição";
+	mes "proteção de luz sagrada...";
+	next;
+	mes "[Anna]";
+	mes "Klaatu...";
+	mes "Verata.....";
+	mes "E... alguma coisa... algo... o que era ele?";
+	mes "Eu nao me lembro muito bem...";
+	next;
+	mes "[Anna]";
+	mes "Disse que se você pudesse falar essas palavras mágicas";
+	mes "Para escapar de uma maldição.";
+	mes "Agora... eu não me lembro o que disse de tão importante";
+	mes "como eu esqueci demais...";
+	close;
+   
+L_end:
+	mes "[Anna]";
+	mes "Frio... Muito frio... eu quero...";
+	mes "va pra casa... me leve com você...";
+	mes "é tão assustador aqui...";
+	mes "por favor... me ajude...";
+	close;
+}
+
+niflheim.gat,350,258,5	script	Alma Amaldiçoada#cniff	802,{
+	killmonster "niflheim.gat","mymob";
+	mes "[Aesop Bruce]";
+	mes "Eu sinto uma forte maldição e vocêeeehh!";
+	mes "Eu negarei sua existenciaaaahh!";
+	mes "Va pra casa ou você morre-raaaaahhhh";
+	mes "Não mexa no meu livrooooooh";
+	next;
+	menu "Toque acima do 1º livro",L_book1,"Toque acima do 2º livro",L_book2,"Toque acima do 3º livro",L_book3,"Saia em silencio",L_back;
+   
+L_book1:
+	mes "[Aesop]";
+	mes "Não! Você tocou meu livroooohhh!!";
+	mes "Ahahaha, Eu amaldiçoei você! Sera mordido e rasgado!!!";
+	mes "Leve para sempre essa maldição!!";
+	monster "niflheim.gat",350,258,"Rideword",1478,1,"mymob";
+	close;
+
+L_book2:
+	mes "[Aesop Bruce]";
+	mes "Eu disse não toque em meu livrooooh!...";
+	mes "Perdedor...";
+	mes "Não perturbe meu sonooohhhh!!";
+	warp "niflheim.gat",34,162;
+	close;
+
+L_book3:
+	set nif_t,0;
+	set @nif_random1,rand(1,10);
+	mes "[Aesop Bruce]";
+	mes "Ahahaha! Eu vi que você é corajoso!!!";
+	mes "Diga as palavras magicashasahahahah!!";
+	next;
+L_MENU1:
+	menu "Trevo.",L_MENU1_1,"Klaatu.",L_MENU1_2,"Kleitos.",L_MENU1_3;
+
+	L_MENU1_1:
+	goto L_MENU2;
+
+	L_MENU1_2:
+	set nif_t,nif_t + 10;
+	goto L_MENU2;
+
+	L_MENU1_3: 
+	goto L_MENU2;
+
+L_MENU2:
+	menu "Verit.",L_MENU2_1,"Veritas.",L_MENU2_2,"Verata.",L_MENU2_3;
+	
+	L_MENU2_1:
+	goto L_MENU3;
+
+	L_MENU2_2: 
+	goto L_MENU3;
+
+	L_MENU2_3:
+	set nif_t,nif_t + 10;
+	goto L_MENU3;
+
+L_MENU3:
+	menu "Necktie.",L_MENU3_1,"Colar.",L_MENU3_2,"Nero.",L_MENU3_3,"^FFFFFFNictu.^000000",L_MENU3_4;
+
+	L_MENU3_1: 
+	goto L_score;
+
+	L_MENU3_2: 
+	goto L_score;
+
+	L_MENU3_3:
+	goto L_score;
+
+	L_MENU3_4:
+	set nif_t,nif_t + 10;
+	goto L_score;
+
+
+L_score:
+	if (nif_t == 30) goto L_sucess1;
+	mes "[Aesop Bruce]";
+	mes "HAHAHAHA! Suas palavras estão erradashhhh!";
+	mes "Hora de enfrentar a morte! hahahahah,";
+	mes "Você sera amaldiçoado para semprehhh!!!hahahaha!!";
+	monster "niflheim.gat",349,256,"Orc Skeleton",1462,1,"mymob";
+	monster "niflheim.gat",347,258,"Orc Skeleton",1462,1,"mymob";
+	monster "niflheim.gat",347,254,"Orc Skeleton",1462,1,"mymob";
+	monster "niflheim.gat",350,252,"Orc Skeleton",1462,1,"mymob";
+	monster "niflheim.gat",344,255,"Orc Skeleton",1462,1,"mymob";
+	monster "niflheim.gat",348,252,"Orc Skeleton",1462,1,"mymob";
+	monster "niflheim.gat",347,259,"Orc Skeleton",1462,1,"mymob";
+	close;
+
+L_sucess1:
+	if (@nif_random1 == 10) goto L_sucess2;
+	mes "[Aesop Bruce]";
+	mes "Você acertouhhh";
+	mes "Mas sua maldição permanesse aindahhhh!!";
+	mes "Haahahahaha.....!!!";
+	close;
+
+L_sucess2:
+       mes "[Aesop Bruce]";
+       mes "Hahahaha!! Sua maldição ja saiu!!";
+       mes "Gahahahaha.....!!!";
+       close;
+
+L_back:
+	mes "[Aesop Bruce]";
+	mes "Ahahahaha! Não pense mal em tudohhhaahaaa...";
+	mes "Eu espero que você retornehhhh....";
+	close;
+}
+
+niflheim.gat,224,243,3	script	Alager	795,{
+	mes "[Alager]";
+	mes "Muahaha, eu adoro comer carne...";
+	mes "Você parece... Delicioso!";
+	next;
+	mes "[Alager]";
+	mes "Eu vou come-lo...";
+	next;
+	mes "*Chomp*";
+	if (nif_quest1 == 1 || nif_q_done == 1) goto L_end;
+	percentheal -60,0;
+	next;
+	mes "[Alager]";
+	mes "Ahh, nunca comi uma carne tão deliciosa";
+	// 50% made up, not the slightest idea how to translate these ^^;
+	mes "Como 'chef', essa é minha carne favorita";
+	mes "sei preparar um bom filé,";
+	mes "grelhado fica uma perfeição,";
+	mes "isso seria tão delicioso.... ";
+	next;
+	mes "[Alager]";
+	mes "Ah, tenho que lhe agradecer por isso";
+	mes "Eu achei isso no chão...";
+	getitem 7184,1;//Items: Piano Key,
+	set nif_quest1, 1;
+	close;
+L_end:
+	percentheal -30,0;
+ 	close;
+}
+
+nif_in.gat,105,81,3	script	Grey#grey_niff1	794,{
+	mes "[Grey]";
+	mes "Ah, havia um poema...";
+	mes "que não sabia o autor e a epoca era desconhecida,";
+	mes "e havia circulado por um bom tempo...";
+	next;
+	mes "[Grey]";
+	mes "^FF0000Quando o sol se ajustar no ocidente,^000000";
+	mes "^FF0000Pontos de veludo se escurecerão no alvorecer,^000000";
+	mes "^FF0000E uma bela melodia vira das sombras^000000";
+	mes "^FF0000É a chave da ira do Senhor da Morte.^000000";
+	next;
+	if (nif_quest2 == 1 || nif_q_done == 1) goto L_end;
+	set @nif_random,rand(1,4);
+	mes "[Grey]";
+	mes "Hehe, deixe-me lhe fazer um pequeno teste";
+	mes "Repita as frases... " + @nif_random + " do poema";
+	mes "que você ouviu de mim";
+	next;
+	input @inputstr1$;
+	if (@nif_random == 2) goto L_RAN_2;
+	if (@nif_random == 3) goto L_RAN_3;
+	if (@nif_random == 4) goto L_RAN_4;
+	//if (@nif_random == 1) goto L_RAN_1;	
+	L_RAN_1:
+		set @str1$,"Quando o sol se ajustar no ocidente,";
+		goto L_RAN_B;
+	
+	L_RAN_2:
+		set @str1$,"Pontos de veludo se escurecerão no alvorecer,";
+		goto L_RAN_B;
+
+	L_RAN_3:
+		set @str1$,"E uma bela melodia vira das sombras,";
+		goto L_RAN_B;
+
+	L_RAN_4:
+		set @str1$,"É a chave da ira do Senhor da Morte.";
+		goto L_RAN_B;
+
+	L_RAN_B:
+		if (@inputstr1$ == @str1$) goto L_RAN_SC;
+		mes "[Grey]";
+		mes "Ah... você tem que prestar mais atenção,";
+		mes "para saber a resposta correta,";
+		mes "volte para me desafiar denovo,";
+		mes "mas somente quando estiver preparado!";
+		close;
+
+	L_RAN_SC:
+		mes "[Grey]";
+		mes "Oh! Você prestou atenção!";
+		mes "Meu nome é Grey, sou um poeta vagador";
+		mes "Você é a pessoa que mais deu audiencia a meus poemas";
+		mes "Aqui, receba isso como reconpensa";
+		getitem 7184,1;//Items: Piano Key,
+		set nif_quest2, 1;
+		next;
+		mes "[Grey]";
+		mes "Espero que você encontre outros poetas";
+		mes "e trate-os assim como me tratou...";
+		close;
+
+L_end:
+	mes "[Grey]";
+	mes "Eu quero sabe o que ele significa";
+	mes "Se você ler cuidadosamente,";
+	mes "parece ter um significado profundo";
+	mes "e um segredo misterioso";
+	mes "escondido nessas palavras...";
+	close;
+}
+
+nif_in.gat,31,20,3	script	Kurtz#kurtz_niff	794,{
+	mes "[Kurtz]";
+	mes "O negocio hoje em dia é ruim";
+	mes "Era melhor quando estava vivo,";
+	mes "Meu servisso estra muito ruim";
+	if (nif_quest3 == 1 || nif_q_done == 1) close;
+	next;
+	mes "[Kurtz]";
+	mes "Hey! Você! Jogue fora isso pra mim!";
+	mes "Ou segure pra você";
+	getitem 7184,1;//Items: Piano Key,
+	set nif_quest3, 1;
+	next;
+	mes "[Kurtz]";
+	mes "Porque o negocio anda tao mal ultimamente...";
+	mes "...";
+	close;
+}
+
+niflheim.gat,169,71,5	script	#nif1	111,2,2,{
+	if (nif_q_done == 1) end;
+	if (nif_quest4 == 1) end;
+
+	mes "- nos tumulos proximos -";
+	mes "- você ve algo -";
+	mes "- um buraco na terra -";
+	mes "- O que é isso? -";
+	mes "- Tem alguma coisa ai -";
+	next;
+	mes "- Pegar? -";
+	menu "Sim",-,"Não",L_end;
+	getitem 7184,1;//Items: Piano Key,
+	set nif_quest4, 1;
+L_end:
+	close;
+}
+
+niflheim.gat,208,103,5	script	#niff2	111,2,2,{
+	if (nif_q_done == 1) end;
+	if (nif_quest5 == 1) goto L_key2;
+	if (nif_quest5 >= 2) end;
+
+	mes "- nos tumulos proximos -";
+	mes "- você ve algo -";
+	mes "- um buraco na terra -";
+	mes "- O que é isso? -";
+	mes "- Tem alguma coisa ai -";
+	next;
+	mes "- Pegar? -";
+	menu "Sim",-,"Não",L_end;
+	getitem 7184,1;//Items: Piano Key,
+	set nif_quest5, 1;
+	close;
+L_key2:
+	mes "- No buraco você escavou -";
+	mes "- Há algo a mais -";
+	mes "- Enterrado bem no fundo -";
+	mes "- Outro fragmento -";
+	next;
+	mes "- Pick it up? -";
+	menu "Sim",-,"Não",L_end;
+	getitem 7184,1;//Items: Piano Key,
+	set nif_quest5, 2;
+L_end:
+	close;
+}
+
+nif_in.gat,115,181,5	script	#niff4	111,3,3,{
+	mes "- Você ve um grande piano -";
+	if (nif_q_done==0) mes "- Com algumas chaves faltando  -";
+	if (nif_q_done==1) mes "- as chaves foram perdidas -";
+	if (nif_q_done==0 && countitem(7184) > 5) goto L_event;//Items: Piano Key,
+	close;
+
+L_event:
+	delitem 7184,6;//Items: Piano Key,
+	set nif_q_done, 1;
+	//clear auxiliary vars now
+	set nif_quest1, 0;
+	set nif_quest2, 0;
+	set nif_quest3, 0;
+	set nif_quest4, 0;
+	set nif_quest5, 0;
+	set nif_random,0; //clear garbage from the previous version of the script
+	set nif_random1,0; //clear garbage
+	mes "- Você transforma as 6 chaves do piano em 1 -";
+	mes "- e coloca no buraco  -";
+	mes "- no piano, e você  -";
+	mes "- Vê que no lado do piano -";
+	mes "- falta mais uma chave. -";
+	close;
+}
+
+nif_in.gat,118,151,5	script	#niff5	111,3,3,{
+	if (nif_q_done != 1) end;
+
+	mes "- Um momento de escuridão -";
+	mes "- seu corpo cai sobre o piano -";
+	next;
+	mes "- você se sente mais claro -";
+	mes "- e sua visão embaça -";
+	next;
+	warp "nif_in.gat",179,163;
+	close;
+}
+
+nif_in.gat,188,168,3	script	Bruxa#bruxa_nif	792,{
+	mes "[Kilgana]";
+	mes "hmm? você não é um humano vivo?";
+	mes "parece que você fez algum esforço";
+	mes "para chegar nesse lugar...";
+	mes "Embora, isso não é um lugar";
+	mes "onde a vida pertencerá...";
+	next;
+	mes "[Kilgana]";
+	mes "Eu usarei meus poderes para você voltar...";
+	mes "mas você não deve voltar aqui...";
+	close2;
+	warp "umbala.gat",138,208;
+	end;
+}

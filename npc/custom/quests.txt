@@ -1,0 +1,10 @@
+prontera,139,182,6	script	Quadro de Missões	857, 40,40,{
+
+
+OnTouch:
+	showevent 1,1;
+}
+
+function    script  Q_PUPA{
+	        
+}

@@ -1,0 +1,107 @@
+//-----------------------------------------------------------
+//   ____  _     _         _   _                      
+//  / __ \| |   | |   /\  | | | |                     
+// | |  | | | __| |  /  \ | |_| |__   ___ _ __   __ _ 
+// | |  | | |/ _` | / /\ \| __| '_ \ / _ \ '_ \ / _` |
+// | |__| | | (_| |/ ____ \ |_| | | |  __/ | | | (_| |
+//  \____/|_|\__,_/_/    \_\__|_| |_|\___|_| |_|\__,_|
+//-----------------------------------------------------------
+
+
+
+geffen_in.gat,151,119,4	script	Mestre	71,{
+	mes "[BLIZZARDRISS]";
+	if(baseClass == Job_Mage) goto L_Start;
+
+L_Other:
+	mes "Qual será a mágica que aprenderei hojê??";
+	emotion 20;
+	close;
+
+L_Start:
+	if(ENRGYCOAT == 1) goto L_GetSkill;
+	if(getskilllv(157)>0) goto L_GotSkill;
+	mes "Hey! Meu amigo! Eu vejo que és um mago. Se você olhar profundamente dentro de ti, você verá novas habilidades!";
+	next;
+	menu "'Habilidades escondidas?",M_0, "Terminar conversa.",M_End;
+
+	M_0:
+		mes "[BLIZZARDRISS]";
+		mes "Por muitos anos eu estudei as mais antigas magicas de geffen,e recentemente eu descobri um tipo magico totalmente utíl.";
+		next;
+		mes "[BLIZZARDRISS]";
+		mes "Este tipo de magia cria com sua energia um'campo magnético' que 'reveste' seu corpo como um protetor máagico, protegendo-o de ataques inimigos.";
+		next;
+		mes "[BLIZZARDRISS]";
+		mes "Sómente os magos de alto nível podemaprender este novo tipo de mágia.";
+		mes "Essas pessoas devem se concentrar ao máximo para poderem memorizar esta incrivel magia que eu descobri.";
+		next;
+		mes "[BLIZZARDRISS]";
+		mes "Esta mágica eu puiz o nome de ^5555FF'Proteção Arcana'^000000!. Você gostaria de aprender?";
+		next;
+		menu "Wow!Claro!",sM_0, "hmm... não tenho interesse.",sM_End;
+
+		sM_0: 
+			mes "[BLIZZARDRISS]";
+			mes "Para te ensinar eu necessito que trague alguns itens:";
+			mes "^5533FF 3 Bolinhas de Gude,";
+			mes " 1 Diamante de 1Kilate,";
+			mes " 5 Cascas,^000000";
+			mes " and ^5533FF1 Casca Rija ^000000.";
+			next;
+			mes "[BLIZZARDRISS]";
+			mes "Você tambem necessitará de lvl 35 de classe, para eu poder te ensinar";
+			mes "Os bruxos e sábios podem aprender com qualquer level pois são de nivel elevado.";
+			next;
+			mes "[BLIZZARDRISS]";
+			mes "Quando estiver totalmente treinado e com os itens volte aqui.";
+			set ENRGYCOAT, 1;
+			close;
+
+		sM_End:
+			mes "[BLIZZARDRISS]";
+			mes "Hmf! Não venha reclamando quando depois, por um grupo de esporos!!";
+			emotion 6;
+			close;
+
+	M_End:
+		mes "[BLIZZARDRISS]";
+		mes "Homem sábio...volte quando estiver pronto";
+		close;
+
+L_GetSkill:
+	if(BaseJob==Job_Mage && JobLevel < 35) goto L_JobLvl;
+	if(countitem(746)<3 || countitem(730)<1 || countitem(935)<5 || countitem(943)<1) goto L_Items;
+	delitem 746,3;
+	delitem 730,1;
+	delitem 935,5;
+	delitem 943,1;
+	mes "Ohh,... Aqui estão todos itêns mesmos...Obrigado.";
+ 	next;
+	mes "~Muitas horas depois ~";
+	next;
+	skill 157,1,0;
+	set ENRGYCOAT,0;
+ 	mes "[BLIZZARDRISS]";
+ 	mes "Agora você pode usar a minha magia...a incrivel proteção Arcana... saiba como utilizar..!";
+	emotion 21;
+ 	close;
+
+	L_JobLvl:
+		mes "Você não me ouviu ?!? Você precisa de lvl 35 de classe para aprender a 'proteção Arcana'.";
+		emotion 1;
+		close;
+
+	L_Items:
+		mes "Você não me ouviu ?!? Você precisa trazer todos esses itens:";
+		mes "^5533FF 3 Bolinhas de gude,";
+		mes " 1 Diamante de 1Kilate,";
+		mes " 5 cascas,^000000";
+		mes " and ^5533FF1 casca Rija^000000.";
+		emotion 1;
+		close;
+
+L_GotSkill:
+	mes "Ola.A 'Proteção Arcana' é uma habilidade ótima nao? boa sorte na sua jornada";
+	close;
+}

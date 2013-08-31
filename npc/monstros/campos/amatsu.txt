@@ -1,0 +1,7 @@
+ama_fild01.gat,0,0,0,0	monster	Hidra	1068,1,0,0,0
+ama_fild01.gat,0,0,0,0	monster	Kapha	1406,35,0,0,0
+ama_fild01.gat,0,0,0,0	monster	Karakasa	1400,50,0,0,0
+ama_fild01.gat,0,0,0,0	monster	Sapo venenoso	1402,2,0,0,0
+ama_fild01.gat,0,0,0,0	monster	Miyabi Ningyo	1404,2,0,0,0
+ama_fild01.gat,0,0,0,0	monster	Pé-Grande	1060,15,0,0,0
+ama_fild01.gat,0,0,0,0	monster	Poporing	1031,15,0,0,0

@@ -1,0 +1,15 @@
+prontera,156,204,0	script	Fonte de Prontera	111,{
+	mes "Beber a água da fonte?";
+	if(select("Sim:Não")!=1) close;
+	close2;
+	while(( HP < MaxHP || SP < MaxSP )){
+		progressbar("0x11CC99",.HealDelay);
+		percentheal rand(.healrate),rand(.healrate);	
+	}
+end;
+
+OnInit:
+	set .healrate,20;
+	set .HealDelay,2;
+end;
+}
