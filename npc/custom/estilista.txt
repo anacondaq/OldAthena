@@ -39,10 +39,10 @@ OnTalk:
 
 	addtimer 1000,strnpcinfo(0)+"::OnPCLogoutEvent";
 	do{
-		message strcharinfo(0),.menu_name$[@style]+" : "+.@style_number+"th";
+		message strcharinfo(0),.menu_name$[@style]+" : "+.@style_number+"º";
 		.@removed = 0;
 		if( compare( .@blacklist$,","+.@style_number+"," ) ){
-			message strcharinfo(0),"[ REMOVIDO ] "+.menu_name$[@style]+" : "+.@style_number+"th";
+			//message strcharinfo(0),"[ REMOVIDO ] "+.menu_name$[@style]+" : "+.@style_number+"º";
 			.@removed = 1;
 			// setlook .look_type[@style],.min_style[@style];
 		}else{
@@ -54,9 +54,9 @@ OnTalk:
 		if( .@next > .max_style[@style] ) .@next = .min_style[@style];
 		if( .@prev < .min_style[@style] ) .@prev = .max_style[@style];
 		
-		@select = prompt( (( .@backward )?"Voltar":"Avançar" )+" - [ ^777777"+(( .@backward )? .@prev:.@next )+"th Style^000000 ]",
-					(( !.@backward )?"Voltar":"Avançar" )+" - [ ^777777"+(( !.@backward )? .@prev:.@next )+"th Style^000000 ]",
-					"Jump to a Style",
+		@select = prompt( (( .@backward )?"Voltar":"Avançar" )+" - [ ^777777"+(( .@backward )? .@prev:.@next )+"º Estilo^000000 ]",
+					(( !.@backward )?"Voltar":"Avançar" )+" - [ ^777777"+(( !.@backward )? .@prev:.@next )+"º Estilo^000000 ]",
+					"Pular para um estilo",
 					( .@removed )?"":"^0055FFOkay, Eu quero esse "+.menu_name$[@style]+"^000000" );
 					
 		if( @select == 2 ) .@backward = !.@backward;

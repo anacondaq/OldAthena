@@ -31,8 +31,6 @@
 /mapcache
 /nbproject
 
-/conf
-
 # /3rdparty/libconfig/
 /3rdparty/libconfig/Makefile
 /3rdparty/libconfig/*.o
@@ -44,6 +42,7 @@
 # /conf/
 /conf/import
 /conf/msg_conf/import
+/conf/*.conf
 
 # /log/
 /log/*.log
