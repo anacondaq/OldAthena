@@ -14520,8 +14520,8 @@ void clif_cashshop_list( int fd ){
 			WFIFOW( fd, offset ) = cash_shop_items[tab].item[i]->nameid;
 			WFIFOL( fd, offset + 2 ) = cash_shop_items[tab].item[i]->price;
 		}
-
-		WFIFOSET( fd, length );
+		WFIFOSET(fd, packet_len(0x289));
+		//WFIFOSET( fd, length );
 	}
 }
 
