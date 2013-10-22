@@ -1148,11 +1148,6 @@ bool pc_authok(struct map_session_data *sd, int login_id2, time_t expiration_tim
 	}
 
 	/**
-	 * Check if player have any cool downs on
-	 **/
-	skill_cooldown_load(sd);
-
-	/**
 	 * Check if player have any item cooldowns on
 	 **/
 	pc_itemcd_do(sd,true);
@@ -1246,20 +1241,20 @@ int pc_reg_received(struct map_session_data *sd)
 	}
 
 	if ((i = pc_checkskill(sd,RG_PLAGIARISM)) > 0) {
-		sd->cloneskill_id = pc_readglobalreg(sd,"CLONE_SKILL");
+		sd->cloneskill_id = pc_readglobalreg(sd,SKILL_VAR_PLAGIARISM);
 		if (sd->cloneskill_id > 0) {
 			sd->status.skill[sd->cloneskill_id].id = sd->cloneskill_id;
-			sd->status.skill[sd->cloneskill_id].lv = pc_readglobalreg(sd,"CLONE_SKILL_LV");
+			sd->status.skill[sd->cloneskill_id].lv = pc_readglobalreg(sd,SKILL_VAR_PLAGIARISM_LV);
 			if (sd->status.skill[sd->cloneskill_id].lv > i)
 				sd->status.skill[sd->cloneskill_id].lv = i;
 			sd->status.skill[sd->cloneskill_id].flag = SKILL_FLAG_PLAGIARIZED;
 		}
 	}
 	if ((i = pc_checkskill(sd,SC_REPRODUCE)) > 0) {
-		sd->reproduceskill_id = pc_readglobalreg(sd,"REPRODUCE_SKILL");
+		sd->reproduceskill_id = pc_readglobalreg(sd,SKILL_VAR_REPRODUCE);
 		if( sd->reproduceskill_id > 0) {
 			sd->status.skill[sd->reproduceskill_id].id = sd->reproduceskill_id;
-			sd->status.skill[sd->reproduceskill_id].lv = pc_readglobalreg(sd,"REPRODUCE_SKILL_LV");
+			sd->status.skill[sd->reproduceskill_id].lv = pc_readglobalreg(sd,SKILL_VAR_REPRODUCE_LV);
 			if( i < sd->status.skill[sd->reproduceskill_id].lv)
 				sd->status.skill[sd->reproduceskill_id].lv = i;
 			sd->status.skill[sd->reproduceskill_id].flag = SKILL_FLAG_PLAGIARIZED;
@@ -1296,7 +1291,7 @@ int pc_reg_received(struct map_session_data *sd)
 
 	status_calc_pc(sd,1);
 	chrif_scdata_request(sd->status.account_id, sd->status.char_id);
-
+	chrif_skillcooldown_request(sd->status.account_id, sd->status.char_id);
 	intif_Mail_requestinbox(sd->status.char_id, 0); // MAIL SYSTEM - Request Mail Inbox
 	intif_request_questlog(sd);
 
@@ -4548,7 +4543,7 @@ int pc_cart_additem(struct map_session_data *sd,struct item *item_data,int amoun
 	if( i < MAX_CART )
 	{// item already in cart, stack it
 		if( amount > MAX_AMOUNT - sd->status.cart[i].amount || ( data->stack.cart && amount > data->stack.amount - sd->status.cart[i].amount ) )
-			return 1; // no room
+			return 2; // no slot
 
 		sd->status.cart[i].amount+=amount;
 		clif_cart_additem(sd,i,amount,0);
@@ -4557,7 +4552,7 @@ int pc_cart_additem(struct map_session_data *sd,struct item *item_data,int amoun
 	{// item not stackable or not present, add it
 		ARR_FIND( 0, MAX_CART, i, sd->status.cart[i].nameid == 0 );
 		if( i == MAX_CART )
-			return 1; // no room
+			return 2; // no slot
 
 		memcpy(&sd->status.cart[i],item_data,sizeof(sd->status.cart[0]));
 		sd->status.cart[i].amount=amount;
@@ -4612,6 +4607,7 @@ int pc_cart_delitem(struct map_session_data *sd,int n,int amount,int type,e_log_
 int pc_putitemtocart(struct map_session_data *sd,int idx,int amount)
 {
 	struct item *item_data;
+	short flag;
 
 	nullpo_ret(sd);
 
@@ -4623,10 +4619,10 @@ int pc_putitemtocart(struct map_session_data *sd,int idx,int amount)
 	if( item_data->nameid == 0 || amount < 1 || item_data->amount < amount || sd->state.vending )
 		return 1;
 
-	if( pc_cart_additem(sd,item_data,amount,LOG_TYPE_NONE) == 0 )
+	if( (flag = pc_cart_additem(sd,item_data,amount,LOG_TYPE_NONE)) == 0 )
 		return pc_delitem(sd,idx,amount,0,5,LOG_TYPE_NONE);
 
-	return 1;
+	return flag;
 }
 
 /*==========================================
@@ -4888,10 +4884,10 @@ int pc_setpos(struct map_session_data* sd, unsigned short mapindex, int x, int y
 			status_change_end(&sd->bl, SC_CLOAKING, INVALID_TIMER);
 			status_change_end(&sd->bl, SC_CLOAKINGEXCEED, INVALID_TIMER);
 		}
-		for (i = 0; i < EQI_MAX; i++) {
-			if (sd->equip_index[i] >= 0)
-				if (!pc_isequip(sd,sd->equip_index[i]))
-					pc_unequipitem(sd,sd->equip_index[i],2);
+		for( i = 0; i < EQI_MAX; i++ ) {
+			if( sd->equip_index[ i ] >= 0 )
+				if( !pc_isequip( sd , sd->equip_index[ i ] ) )
+					pc_unequipitem( sd , sd->equip_index[ i ] , 2 );
 		}
 		if (battle_config.clear_unit_onwarp&BL_PC)
 			skill_clear_unitgroup(&sd->bl);
@@ -5180,6 +5176,22 @@ int pc_checkequip(struct map_session_data *sd,int pos)
 	}
 
 	return -1;
+}
+
+/*==========================================
+ * Check if sd as nameid equiped somewhere
+ * -return true,false
+ *------------------------------------------*/
+int pc_checkequip2(struct map_session_data *sd,int nameid){
+	int i;
+	for(i=0;i<EQI_MAX;i++){
+		if(equip_pos[i]){
+			int idx = sd->equip_index[i];
+			if (sd->status.inventory[idx].nameid == nameid)
+				return true;
+		}
+	}
+	return false;
 }
 
 /*==========================================
@@ -7550,8 +7562,8 @@ int pc_jobchange(struct map_session_data *sd,int job, int upper)
 			clif_deleteskill(sd,sd->cloneskill_id);
 		}
 		sd->cloneskill_id = 0;
-		pc_setglobalreg(sd, "CLONE_SKILL", 0);
-		pc_setglobalreg(sd, "CLONE_SKILL_LV", 0);
+		pc_setglobalreg(sd,SKILL_VAR_PLAGIARISM, 0);
+		pc_setglobalreg(sd,SKILL_VAR_PLAGIARISM_LV, 0);
 	}
 
 	if(sd->reproduceskill_id) {
@@ -7562,8 +7574,8 @@ int pc_jobchange(struct map_session_data *sd,int job, int upper)
 			clif_deleteskill(sd,sd->reproduceskill_id);
 		}
 		sd->reproduceskill_id = 0;
-		pc_setglobalreg(sd, "REPRODUCE_SKILL",0);
-		pc_setglobalreg(sd, "REPRODUCE_SKILL_LV",0);
+		pc_setglobalreg(sd,SKILL_VAR_REPRODUCE,0);
+		pc_setglobalreg(sd,SKILL_VAR_REPRODUCE_LV,0);
 	}
 
 	// Give or reduce transcendent status points
@@ -8458,6 +8470,8 @@ int pc_checkcombo(struct map_session_data *sd, struct item_data *data ) {
 	int index, idx, success = 0;
 
 	for( i = 0; i < data->combos_count; i++ ) {
+		struct s_combo_pair *pair;
+		uint8 pair_idx = 0;
 
 		/* ensure this isn't a duplicate combo */
 		if( sd->combos.bonus != NULL ) {
@@ -8469,6 +8483,7 @@ int pc_checkcombo(struct map_session_data *sd, struct item_data *data ) {
 				continue;
 		}
 
+		CREATE(pair,struct s_combo_pair,1);
 		for( j = 0; j < data->combos[i]->count; j++ ) {
 			int id = data->combos[i]->nameid[j];
 			bool found = false;
@@ -8488,6 +8503,8 @@ int pc_checkcombo(struct map_session_data *sd, struct item_data *data ) {
 						continue;
 
 					found = true;
+					pair->nameid[pair_idx] = id;
+					pair_idx ++;
 					break;
 				} else { //Cards
 					if ( sd->inventory_data[index]->slot == 0 || itemdb_isspecial(sd->status.inventory[index].card[0]) )
@@ -8500,6 +8517,8 @@ int pc_checkcombo(struct map_session_data *sd, struct item_data *data ) {
 
 						// We have found a match
 						found = true;
+						pair->nameid[pair_idx] = id;
+						pair_idx ++;
 						break;
 					}
 				}
@@ -8515,22 +8534,24 @@ int pc_checkcombo(struct map_session_data *sd, struct item_data *data ) {
 			continue;
 
 		/* we got here, means all items in the combo are matching */
-
 		idx = sd->combos.count;
-
 		if( sd->combos.bonus == NULL ) {
 			CREATE(sd->combos.bonus, struct script_code *, 1);
 			CREATE(sd->combos.id, unsigned short, 1);
 			sd->combos.count = 1;
+			CREATE(sd->combos.pair, struct s_combo_pair *, 1);
 		} else {
 			RECREATE(sd->combos.bonus, struct script_code *, ++sd->combos.count);
 			RECREATE(sd->combos.id, unsigned short, sd->combos.count);
+			RECREATE(sd->combos.pair, struct s_combo_pair *, sd->combos.count);
 		}
-
 		/* we simply copy the pointer */
 		sd->combos.bonus[idx] = data->combos[i]->script;
 		/* save this combo's id */
 		sd->combos.id[idx] = data->combos[i]->id;
+		/* store the items id that trigger this combo */
+		memcpy(&sd->combos.pair[idx], pair, sizeof(pair));
+		aFree(pair);
 
 		success++;
 	}
@@ -8553,7 +8574,10 @@ int pc_removecombo(struct map_session_data *sd, struct item_data *data ) {
 
 		sd->combos.bonus[x] = NULL;
 		sd->combos.id[x] = 0;
+		sd->combos.pair[x] = NULL;
 		retval++;
+
+		/* move next value to empty slot */
 		for( j = 0, cursor = 0; j < sd->combos.count; j++ ) {
 			if( sd->combos.bonus[j] == NULL )
 				continue;
@@ -8561,8 +8585,8 @@ int pc_removecombo(struct map_session_data *sd, struct item_data *data ) {
 			if( cursor != j ) {
 				sd->combos.bonus[cursor] = sd->combos.bonus[j];
 				sd->combos.id[cursor]    = sd->combos.id[j];
+				sd->combos.pair[cursor]  = sd->combos.pair[j];
 			}
-
 			cursor++;
 		}
 
@@ -8574,11 +8598,12 @@ int pc_removecombo(struct map_session_data *sd, struct item_data *data ) {
 		if( (sd->combos.count = cursor) == 0 ) {
 			aFree(sd->combos.bonus);
 			aFree(sd->combos.id);
+			aFree(sd->combos.pair);
 			sd->combos.bonus = NULL;
 			sd->combos.id = NULL;
+			sd->combos.pair = NULL;
 			return retval; /* we also can return at this point for we have no more combos to check */
 		}
-
 	}
 
 	return retval;
@@ -9020,8 +9045,7 @@ int pc_checkitem(struct map_session_data *sd)
 	}
 
 	for( i = 0; i < MAX_INVENTORY; i++) {
-
-		if( sd->status.inventory[i].nameid == 0 )
+		if( !(&sd->status.inventory[i]) || sd->status.inventory[i].nameid == 0 )
 			continue;
 
 		if( !sd->status.inventory[i].equip )
@@ -9033,6 +9057,11 @@ int pc_checkitem(struct map_session_data *sd)
 			continue;
 		}
 
+		if( !pc_has_permission(sd, PC_PERM_USE_ALL_EQUIPMENT) && !battle_config.allow_equip_restricted_item && itemdb_isNoEquip(sd->inventory_data[i], sd->bl.m) ) {
+			pc_unequipitem(sd, i, 2);
+			calc_flag = 1;
+			continue;
+		}
 	}
 
 	if( calc_flag && sd->state.active ) {

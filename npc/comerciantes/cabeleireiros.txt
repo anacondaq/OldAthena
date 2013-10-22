@@ -700,7 +700,7 @@ lhz_in02,100,143,3	script	Cabeleireiro#li	122,{
 	}
 }
 
-lhz_in02,91,155,5	script	Assistente de Cabeleireiro#li	862,{
+lhz_in02,91,155,5	script	Assistente#li	862,{
 	mes "[Assistente de Cabeleireiro]";
 	mes "Quê?! Querido Jiminy, você me assustou!";
 	mes "O que está fazendo?!";

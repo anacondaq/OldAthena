@@ -2815,7 +2815,7 @@ int mob_warpslave_sub(struct block_list *bl,va_list ap)
 		return 0;
 
 	map_search_freecell(master, 0, &x, &y, range, range, 0);
-	unit_warp(&md->bl, master->m, x, y,CLR_RESPAWN);
+	unit_warp(&md->bl, master->m, x, y,CLR_TELEPORT);
 	return 1;
 }
 
@@ -3805,6 +3805,8 @@ static bool mob_parse_dbrow(char** str)
 		id = itemdb_search(db->dropitem[i].nameid);
 		type = id->type;
 		rate = atoi(str[k+1]);
+		if (battle_config.drop_rateincrease)
+			if (rate < 5000) rate++;
 		if( (class_ >= 1324 && class_ <= 1363) || (class_ >= 1938 && class_ <= 1946) )
 		{	//Treasure box drop rates [Skotlex]
 			rate_adjust = battle_config.item_rate_treasure;

@@ -49,6 +49,7 @@
 #include "mail.h"
 #include "cashshop.h"
 #include "channel.h"
+#include "vending.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -1705,10 +1706,10 @@ int map_quit(struct map_session_data *sd) {
 
 	if( sd->ed ) {
 		elemental_clean_effect(sd->ed);
-		unit_remove_map(&sd->ed->bl,CLR_TELEPORT);
+		unit_remove_map(&sd->ed->bl,CLR_RESPAWN);
 	}
 
-	unit_remove_map_pc(sd,CLR_TELEPORT);
+	unit_remove_map_pc(sd,CLR_RESPAWN);
 
 	if( map[sd->bl.m].instance_id ) { // Avoid map conflicts and warnings on next login
 		int16 m;
@@ -1726,6 +1727,9 @@ int map_quit(struct map_session_data *sd) {
 			sd->mapindex = pt->map;
 		}
 	}
+
+	if (sd->state.vending)
+		idb_remove(vending_getdb(), sd->status.char_id);
 
 	pc_damage_log_clear(sd,0);
 	party_booking_delete(sd); // Party Booking [Spiria]

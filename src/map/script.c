@@ -7798,7 +7798,7 @@ BUILDIN_FUNC(downrefitem)
  *------------------------------------------*/
 BUILDIN_FUNC(delequip)
 {
-	int i=-1,num;
+	int i=-1,num,ret=0;
 	TBL_PC *sd;
 
 	num = script_getnum(st,2);
@@ -7809,11 +7809,36 @@ BUILDIN_FUNC(delequip)
 	if (num > 0 && num <= ARRAYLENGTH(equip))
 		i=pc_checkequip(sd,equip[num-1]);
 	if(i >= 0) {
-		int ret;
 		pc_unequipitem(sd,i,3); //recalculate bonus
-		ret=pc_delitem(sd,i,1,0,2,LOG_TYPE_SCRIPT);
-		script_pushint(st,ret==0);
+		ret = !(pc_delitem(sd,i,1,0,2,LOG_TYPE_SCRIPT));
 	}
+
+	script_pushint(st,ret);
+	return 0;
+}
+
+/*==========================================
+ * Break the item equipped at pos.
+ *------------------------------------------*/
+BUILDIN_FUNC(breakequip)
+{
+	int i=-1,num;
+	TBL_PC *sd;
+
+	num = script_getnum(st,2);
+	sd = script_rid2sd(st);
+	if( sd == NULL )
+		return 0;
+
+	if (num > 0 && num <= ARRAYLENGTH(equip))
+		i = pc_checkequip(sd,equip[num-1]);
+	if (i >= 0) {
+		sd->status.inventory[i].attribute = 1;
+		pc_unequipitem(sd,i,3);
+		clif_equiplist(sd);
+		script_pushint(st,1);
+	} else
+		script_pushint(st,0);
 
 	return 0;
 }
@@ -10781,12 +10806,11 @@ BUILDIN_FUNC(setmapflagnosave)
 
 BUILDIN_FUNC(getmapflag)
 {
-	int16 m,i,type=0;
+	int16 m,i;
 	const char *str;
 
 	str=script_getstr(st,2);
 	i=script_getnum(st,3);
-	FETCH(4,type);
 
 	m = map_mapname2mapid(str);
 	if(m >= 0) {
@@ -10852,7 +10876,8 @@ BUILDIN_FUNC(getmapflag)
 #ifdef ADJUST_SKILL_DAMAGE
 			case MF_SKILL_DAMAGE:
 				{
-					int ret_val = 0;
+					int ret_val=0, type=0;
+					FETCH(4,type);
 					switch (type) {
 						case 1: ret_val = map[m].adjust.damage.pc; break;
 						case 2: ret_val = map[m].adjust.damage.mob; break;
@@ -10886,14 +10911,13 @@ static int script_mapflag_pvp_sub(struct block_list *bl,va_list ap) {
 }
 BUILDIN_FUNC(setmapflag)
 {
-	int16 m,i,type=0;
+	int16 m,i;
 	const char *str;
 	int val=0;
 
 	str=script_getstr(st,2);
 	i=script_getnum(st,3);
 	FETCH(4,val);
-	FETCH(5,type);
 	m = map_mapname2mapid(str);
 	if(m >= 0) {
 		switch(i) {
@@ -10974,6 +10998,8 @@ BUILDIN_FUNC(setmapflag)
 #ifdef ADJUST_SKILL_DAMAGE
 			case MF_SKILL_DAMAGE:
 				{
+					int type=0;
+					FETCH(5,type);
 					switch (type) {
 						case 1: map[m].adjust.damage.pc = val; break;
 						case 2: map[m].adjust.damage.mob = val; break;
@@ -17990,6 +18016,8 @@ BUILDIN_FUNC(getserverdef){
 	return 0;
 }
 
+#include "../custom/script.inc"
+
 // declarations that were supposed to be exported from npc_chat.c
 #ifdef PCRE_SUPPORT
 BUILDIN_FUNC(defpattern);
@@ -18434,6 +18462,7 @@ struct script_function buildin_func[] = {
 	BUILDIN_DEF(npcskill,"viii"),
 	BUILDIN_DEF(consumeitem,"v"),
 	BUILDIN_DEF(delequip,"i"),
+	BUILDIN_DEF(breakequip,"i"),
 	BUILDIN_DEF(sit,"?"),
 	BUILDIN_DEF(stand,"?"),
 	/**
@@ -18466,5 +18495,8 @@ struct script_function buildin_func[] = {
 
 	BUILDIN_DEF(is_clientver,"ii?"),
 	BUILDIN_DEF(getserverdef,"i"),
+
+#include "../custom/script_def.inc"
+
 	{NULL,NULL,NULL},
 };

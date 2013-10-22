@@ -562,7 +562,7 @@ int elemental_skillnotok(uint16 skill_id, struct elemental_data *ed) {
 	if (idx == 0)
 		return 1; // invalid skill id
 
-	return skillnotok(skill_id, ed->master);
+	return skill_isNotOk(skill_id,ed->master);
 }
 
 struct skill_condition elemental_skill_get_requirements(uint16 skill_id, uint16 skill_lv){
@@ -577,8 +577,8 @@ struct skill_condition elemental_skill_get_requirements(uint16 skill_id, uint16 
 	if( skill_lv < 1 || skill_lv > MAX_SKILL_LEVEL )
 		return req;
 
-	req.hp = skill_db[idx].hp[skill_lv-1];
-	req.sp = skill_db[idx].sp[skill_lv-1];
+	req.hp = skill_db[idx].require.hp[skill_lv-1];
+	req.sp = skill_db[idx].require.sp[skill_lv-1];
 
 	return req;
 }

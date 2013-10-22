@@ -383,7 +383,6 @@ extern struct Battle_Config
 
 	int ignore_items_gender; //[Lupus]
 
-	int copyskill_restrict; // [Aru]
 	int berserk_cancels_buffs; // [Aru]
 	int debuff_on_logout; // Removes a few "official" negative Scs on logout. [Skotlex]
 	int mob_ai; //Configures various mob_ai settings to make them smarter or dumber(official). [Skotlex]
@@ -494,7 +493,9 @@ extern struct Battle_Config
 	int item_enabled_npc;
 	int item_onfloor; // Whether to drop an undroppable item on the map or destroy it if inventory is full.
 	int bowling_bash_area;
-	} battle_config;
+	int drop_rateincrease;
+
+} battle_config;
 
 void do_init_battle(void);
 void do_final_battle(void);

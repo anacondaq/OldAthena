@@ -3,9 +3,9 @@
 //===== By: ==================================================
 //= rAthena Dev Team
 //===== Current Version: =====================================
-//= $Revision: 17482 $
+//= $Revision: 17689 $
 //===== Last Updated: ========================================
-//= $LastChangedDate: 2013-08-28 23:30:35 -0300 (qua, 28 ago 2013) $
+//= $LastChangedDate: 2013-10-14 16:48:11 -0300 (seg, 14 out 2013) $
 //===== Description: =========================================
 //= A reference manual for the rAthena scripting language.
 //= Commands are sorted depending on their functionality.
@@ -926,7 +926,7 @@ This special label triggers when a player kills another player. The variable
 OnNPCKillEvent:
 
 This special label triggers when a player kills a monster. The variable
-'killedrid' is set to the Class of the monster killed.
+'killedrid' is set to the Class (mob ID) of the monster killed.
 
 OnPCLoadMapEvent:
 
@@ -4610,6 +4610,16 @@ This command will return 1 if an item was deleted and 0 otherwise.
 
 ---------------------------------------
 
+*breakequip <equipment slot>;
+
+This command will break and unequip whatever is currently equipped in the
+invoking character's specified equipment slot. For a full list of possible
+equipment slots see 'getequipid'.
+
+This command will return 1 if an item was broken and 0 otherwise.
+
+---------------------------------------
+
 *clearitem;
 
 This command will destroy all items the invoking character has in their 
@@ -6072,7 +6082,7 @@ specified.
 
 ---------------------------------------
 
-*setmapflag "<map name>",<flag>{,<zone>};
+*setmapflag "<map name>",<flag>{,<zone>{,<type>}};
 
 This command marks a specified map with the given map flag, which will alter the 
 behavior of the map. A full list of mapflags is located in 'db/const.txt' with
@@ -6087,7 +6097,15 @@ skills or open up trade deals (mf_notrade, mf_novending, mf_noskill, mf_noicewal
 current weather effects (mf_snow, mf_fog, mf_sakura, mf_leaves, mf_rain, mf_clouds, 
 mf_fireworks) and whether night will be in effect on this map (mf_nightenabled).
 
-The zone optional parameter is used to set the zone for restricted mapflags.
+The optional parameter 'zone' is used to set the zone for restricted mapflags.
+
+For the 'skill_damage' mapflag, 'zone' functions as 'value' (-100 to 100000) and
+'type' can be:
+ 1: damage against players
+ 2: damage against mobs
+ 3: damage against bosses
+ 4: damage against other
+ 5: caster type
 
 ---------------------------------------
 
@@ -6096,14 +6114,22 @@ The zone optional parameter is used to set the zone for restricted mapflags.
 This command removes a mapflag from a specified map. 
 See 'setmapflag' for a list of mapflags.
 
-The zone optional parameter is used to remove the zone from restricted mapflags.
+The optional parameter 'zone' is used to remove the zone from restricted mapflags.
 
 ---------------------------------------
 
-*getmapflag("<map name>",<flag>)
+*getmapflag("<map name>",<flag>{,<type>})
 
 This command checks the status of a given mapflag and returns the mapflag's state. 
 0 means OFF, and 1 means ON. See 'setmapflag' for a list of mapflags.
+
+The optional parameter 'type' is used in the 'skill_damage' mapflag:
+ 0: if mapflag is set (default)
+ 1: damage against players
+ 2: damage against mobs
+ 3: damage against bosses
+ 4: damage against other
+ 5: caster type
 
 ---------------------------------------
 

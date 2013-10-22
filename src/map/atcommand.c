@@ -7344,7 +7344,7 @@ ACMD_FUNC(whodrops)
 	}
 	for (i = 0; i < count; i++) {
 		item_data = item_array[i];
-		sprintf(atcmd_output, msg_txt(sd,1285), item_data->jname,item_data->slot); // Item: '%s'[%d]
+		sprintf(atcmd_output, msg_txt(sd,1285), item_data->jname, item_data->slot, item_data->nameid); // Item: '%s'[%d] (ID:%d)
 		clif_displaymessage(fd, atcmd_output);
 
 		if (item_data->mob[0].chance == 0) {
@@ -9081,6 +9081,8 @@ ACMD_FUNC(langtype)
 	return -1;
 }
 
+#include "../custom/atcommand.inc"
+
 /**
  * Fills the reference of available commands in atcommand DBMap
  **/
@@ -9095,6 +9097,7 @@ void atcommand_basecommands(void) {
 	 * TODO : all restricted command are crashing case, please look into it
 	 **/
 	AtCommandInfo atcommand_base[] = {
+#include "../custom/atcommand_def.inc"
 		ACMD_DEF2R("warp", mapmove, 1),
 		ACMD_DEF(where),
 		ACMD_DEF(jumpto),

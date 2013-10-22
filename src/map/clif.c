@@ -5361,6 +5361,8 @@ void clif_cooking_list(struct map_session_data *sd, int trigger, uint16 skill_id
 	nullpo_retv(sd);
 	fd = sd->fd;
 
+	if(sd->menuskill_id == skill_id)
+		return; //Avoid resending the menu twice or more times...
 	WFIFOHEAD(fd, 6 + 2 * MAX_SKILL_PRODUCE_DB);
 	WFIFOW(fd,0) = 0x25a;
 	WFIFOW(fd,4) = list_type; // list type
@@ -5378,30 +5380,20 @@ void clif_cooking_list(struct map_session_data *sd, int trigger, uint16 skill_id
 		c++;
 	}
 
-	if( skill_id == AM_PHARMACY ) {	// Only send it while Cooking else check for c.
-		WFIFOW(fd,2) = 6 + 2 * c;
-		WFIFOSET(fd,WFIFOW(fd,2));
-	}
-
-	if( c > 0 ) {
+	if( c > 0 || skill_id == AM_PHARMACY) {
 		sd->menuskill_id = skill_id;
 		sd->menuskill_val = trigger;
-		if( skill_id != AM_PHARMACY ) {
-			sd->menuskill_val2 = qty; // amount.
-			WFIFOW(fd,2) = 6 + 2 * c;
-			WFIFOSET(fd,WFIFOW(fd,2));
-		}
+		sd->menuskill_val2 = qty; // amount.
+		WFIFOW(fd,2) = 6 + 2 * c;
+		WFIFOSET(fd,WFIFOW(fd,2));
 	} else {
 		clif_menuskill_clear(sd);
-		if( skill_id != AM_PHARMACY ) { // AM_PHARMACY is used to Cooking.
-			// It fails.
 #if PACKETVER >= 20090922
 			clif_msg_skill(sd,skill_id,0x625);
 #else
 			WFIFOW(fd,2) = 6 + 2 * c;
 			WFIFOSET(fd,WFIFOW(fd,2));
 #endif
-		}
 	}
 }
 
@@ -6124,6 +6116,19 @@ void clif_cart_additem(struct map_session_data *sd,int n,int amount,int fail)
 #endif
 }
 
+// [Ind/Hercules] - Data Thanks to Yommy
+void clif_cart_additem_ack(struct map_session_data *sd, int flag)
+{
+	int fd;
+	unsigned char *buf;
+	nullpo_retv(sd);
+
+	fd = sd->fd;
+	buf = WFIFOP(fd,0);
+	WBUFW(buf,0) = 0x12c;
+	WBUFL(buf,2) = flag;
+	clif_send(buf,packet_len(0x12c),&sd->bl,SELF);
+}
 
 /// Deletes an item from character's cart (ZC_DELETE_ITEM_FROM_CART).
 /// 0125 <index>.W <amount>.L
@@ -10671,12 +10676,15 @@ void clif_parse_StopAttack(int fd,struct map_session_data *sd)
 void clif_parse_PutItemToCart(int fd,struct map_session_data *sd)
 {
 	struct s_packet_db* info = &packet_db[sd->packet_ver][RFIFOW(fd,0)];
+	short flag = 0;
 	if (pc_istrading(sd))
 		return;
 	if (!pc_iscarton(sd))
 		return;
-	pc_putitemtocart(sd,RFIFOW(fd,info->pos[0])-2,
-		RFIFOL(fd,info->pos[1]));
+	if ((flag = pc_putitemtocart(sd,RFIFOW(fd,info->pos[0])-2,RFIFOL(fd,info->pos[1])))) {
+		clif_dropitem(sd,RFIFOW(fd,info->pos[0])-2,0);
+		clif_cart_additem_ack(sd,(flag==1)?ADDITEM_TO_CART_FAIL_WEIGHT:ADDITEM_TO_CART_FAIL_COUNT);
+	}
 }
 
 
@@ -10767,7 +10775,7 @@ static void clif_parse_UseSkillToId_homun(struct homun_data *hd, struct map_sess
 
 	if( !hd )
 		return;
-	if( skillnotok_hom(skill_id, hd) )
+	if( skill_isNotOk_hom(skill_id, hd) )
 		return;
 	if( hd->bl.id != target_id && skill_get_inf(skill_id)&INF_SELF_SKILL )
 		target_id = hd->bl.id;
@@ -10790,7 +10798,7 @@ static void clif_parse_UseSkillToPos_homun(struct homun_data *hd, struct map_ses
 	int lv;
 	if( !hd )
 		return;
-	if( skillnotok_hom(skill_id, hd) )
+	if( skill_isNotOk_hom(skill_id, hd) )
 		return;
 	if( hd->ud.skilltimer != INVALID_TIMER ) {
 		if( skill_id != SA_CASTCANCEL && skill_id != SO_SPELLFIST ) return;
@@ -10812,7 +10820,7 @@ static void clif_parse_UseSkillToId_mercenary(struct mercenary_data *md, struct 
 
 	if( !md )
 		return;
-	if( skillnotok_mercenary(skill_id, md) )
+	if( skill_isNotOk_mercenary(skill_id, md) )
 		return;
 	if( md->bl.id != target_id && skill_get_inf(skill_id)&INF_SELF_SKILL )
 		target_id = md->bl.id;
@@ -10835,7 +10843,7 @@ static void clif_parse_UseSkillToPos_mercenary(struct mercenary_data *md, struct
 	int lv;
 	if( !md )
 		return;
-	if( skillnotok_mercenary(skill_id, md) )
+	if( skill_isNotOk_mercenary(skill_id, md) )
 		return;
 	if( md->ud.skilltimer != INVALID_TIMER )
 		return;
@@ -10904,7 +10912,7 @@ void clif_parse_UseSkillToId(int fd, struct map_session_data *sd)
 	if( pc_issit(sd) )
 		return;
 
-	if( skillnotok(skill_id, sd) )
+	if( skill_isNotOk(skill_id, sd) )
 		return;
 
 	if( sd->bl.id != target_id && tmp&INF_SELF_SKILL )
@@ -10986,7 +10994,7 @@ static void clif_parse_UseSkillToPosSub(int fd, struct map_session_data *sd, uin
 	//Whether skill fails or not is irrelevant, the char ain't idle. [Skotlex]
 	sd->idletime = last_tick;
 
-	if( skillnotok(skill_id, sd) )
+	if( skill_isNotOk(skill_id, sd) )
 		return;
 	if( skillmoreinfo != -1 ) {
 		if( pc_issit(sd) ) {
@@ -14520,8 +14528,8 @@ void clif_cashshop_list( int fd ){
 			WFIFOW( fd, offset ) = cash_shop_items[tab].item[i]->nameid;
 			WFIFOL( fd, offset + 2 ) = cash_shop_items[tab].item[i]->price;
 		}
-		WFIFOSET(fd, packet_len(0x289));
-		//WFIFOSET( fd, length );
+
+		WFIFOSET( fd, length );
 	}
 }
 

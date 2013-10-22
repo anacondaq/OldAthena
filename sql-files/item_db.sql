@@ -2,6 +2,34 @@
 #  REPLACE INTO `item_db` VALUES ('ID','Name','Name','Type','Price','Sell','Weight','ATK','DEF','Range','Slot','Job','Upper','Gender','Loc','wLV','eLV','Refineable','View','Script','OnEquip_Script','OnUnequip_Script');
 # 
 
+DROP TABLE IF EXISTS `item_db`;
+CREATE TABLE `item_db` (
+  `id` smallint(5) unsigned NOT NULL default '0',
+  `name_english` varchar(50) NOT NULL default '',
+  `name_japanese` varchar(50) NOT NULL default '',
+  `type` tinyint(2) unsigned NOT NULL default '0',
+  `price_buy` mediumint(10) unsigned default NULL,
+  `price_sell` mediumint(10) unsigned default NULL,
+  `weight` smallint(5) unsigned NOT NULL default '0',
+  `attack` smallint(3) unsigned default NULL,
+  `defence` smallint(5) NULL default NULL,
+  `range` tinyint(2) unsigned default NULL,
+  `slots` tinyint(2) unsigned default NULL,
+  `equip_jobs` int(12) unsigned default NULL,
+  `equip_upper` tinyint(8) unsigned default NULL,
+  `equip_genders` tinyint(2) unsigned default NULL,
+  `equip_locations` smallint(4) unsigned default NULL,
+  `weapon_level` tinyint(2) unsigned default NULL,
+  `equip_level` tinyint(3) unsigned default NULL,
+  `refineable` tinyint(1) unsigned default NULL,
+  `view` smallint(3) unsigned default NULL,
+  `script` text,
+  `equip_script` text,
+  `unequip_script` text,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM;
+
+
 # Itens de Cura
 # =============================================================
 REPLACE INTO `item_db` VALUES (501,'Poção_Vermelha','Poção Vermelha',0,50,NULL,70,NULL,NULL,NULL,NULL,0xFFFFFFFF,7,2,NULL,NULL,NULL,NULL,NULL,'itemheal rand(45,64),0;',NULL,NULL);

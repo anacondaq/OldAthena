@@ -118,8 +118,21 @@ struct view_data* npc_get_viewdata(int class_)
 	return NULL;
 }
 
-static int npc_isnear_sub(struct block_list* bl, va_list args) {
+int npc_isnear_sub(struct block_list* bl, va_list args) {
     struct npc_data *nd = (struct npc_data*)bl;
+	int skill_id = va_arg(args, int);
+	uint16 idx = -1;
+
+	//Check the NPC type if is used by INF2_NO_NEARNPC (skill_id is not null) [Cydh]
+	if (skill_id && (idx = skill_get_index(skill_id)) && skill_db[idx].unit_nonearnpc_type) {
+		while (1) {
+			if (skill_db[idx].unit_nonearnpc_type&1 && nd->subtype == WARP) break;
+			if (skill_db[idx].unit_nonearnpc_type&2 && nd->subtype == SHOP) break;
+			if (skill_db[idx].unit_nonearnpc_type&4 && nd->subtype == SCRIPT) break;
+			if (skill_db[idx].unit_nonearnpc_type&8 && nd->subtype == TOMB) break;
+				return 0;
+		}
+	}
 
     if( nd->sc.option & (OPTION_HIDE|OPTION_INVISIBLE) )
         return 0;
@@ -130,7 +143,7 @@ static int npc_isnear_sub(struct block_list* bl, va_list args) {
 bool npc_isnear(struct block_list * bl) {
 
     if( battle_config.min_npc_vendchat_distance > 0 &&
-            map_foreachinrange(npc_isnear_sub,bl, battle_config.min_npc_vendchat_distance, BL_NPC) )
+            map_foreachinrange(npc_isnear_sub,bl, battle_config.min_npc_vendchat_distance, BL_NPC, 0) )
         return true;
 
     return false;
@@ -950,8 +963,8 @@ int npc_touch_areanpc(struct map_session_data* sd, int16 m, int16 x, int16 y)
 	}
 	switch(map[m].npc[i]->subtype) {
 		case WARP:
-			if( pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]) )
-				break; // hidden chars cannot use warps
+			if (pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]) || pc_isdead(sd))
+				break; // hidden or dead chars cannot use warps
 			pc_setpos(sd,map[m].npc[i]->u.warp.mapindex,map[m].npc[i]->u.warp.x,map[m].npc[i]->u.warp.y,CLR_OUTSIGHT);
 			break;
 		case SCRIPT:
@@ -962,8 +975,8 @@ int npc_touch_areanpc(struct map_session_data* sd, int16 m, int16 x, int16 y)
 
 				if ((sd->bl.x >= (map[m].npc[j]->bl.x - map[m].npc[j]->u.warp.xs) && sd->bl.x <= (map[m].npc[j]->bl.x + map[m].npc[j]->u.warp.xs)) &&
 					(sd->bl.y >= (map[m].npc[j]->bl.y - map[m].npc[j]->u.warp.ys) && sd->bl.y <= (map[m].npc[j]->bl.y + map[m].npc[j]->u.warp.ys))) {
-					if( pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]) )
-						break; // hidden chars cannot use warps
+					if( pc_ishiding(sd) || (sd->sc.count && sd->sc.data[SC_CAMOUFLAGE]) || pc_isdead(sd) )
+						break; // hidden or dead chars cannot use warps
 					pc_setpos(sd,map[m].npc[j]->u.warp.mapindex,map[m].npc[j]->u.warp.x,map[m].npc[j]->u.warp.y,CLR_OUTSIGHT);
 					found_warp = 1;
 					break;
@@ -2712,7 +2725,7 @@ int npc_duplicate4instance(struct npc_data *snd, int16 m) {
 
 		if(!imap)
 			imap = map_mapname2mapid(map[dm].name);
-	
+
 		if( imap == -1 ) {
 			ShowError("npc_duplicate4instance: warp (%s) leading to instanced map (%s), but instance map is not attached to current instance.\n", map[dm].name, snd->exname);
 			return 1;
@@ -3830,14 +3843,14 @@ int npc_reload(void) {
 	//Re-read the NPC Script Events cache.
 	npc_read_event_script();
 
-	do_reload_instance();
-
 	/* refresh guild castle flags on both woe setups */
 	npc_event_doall("OnAgitInit");
 	npc_event_doall("OnAgitInit2");
 
 	//Execute the OnInit event for freshly loaded npcs. [Skotlex]
 	ShowStatus("Event '"CL_WHITE"OnInit"CL_RESET"' executed with '"CL_WHITE"%d"CL_RESET"' NPCs.\n",npc_event_doall("OnInit"));
+
+	do_reload_instance();
 
 	// Execute rest of the startup events if connected to char-server. [Lance]
 	if(!CheckForCharServer()){

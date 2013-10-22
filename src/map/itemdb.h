@@ -40,7 +40,7 @@ enum item_itemid {
  * Rune Knight
  **/
 
-enum {
+enum rune_list {
 	ITEMID_NAUTHIZ = 12725,
 	ITEMID_RAIDO,
 	ITEMID_BERKANA,
@@ -50,12 +50,13 @@ enum {
 	ITEMID_THURISAZ,
 	ITEMID_WYRD,
 	ITEMID_HAGALAZ,
-} rune_list;
+	ITEMID_LUX_ANIMA = 22540
+};
 
 /**
  * Mechanic
  **/
-enum {
+enum mecha_item_list {
 	ITEMID_ACCELERATOR = 2800,
 	ITEMID_HOVERING_BOOSTER,
 	ITEMID_SUICIDAL_DEVICE,
@@ -67,11 +68,11 @@ enum {
 	ITEMID_CAMOUFLAGE_GENERATOR,
 	ITEMID_HIGH_QUALITY_COOLER,
 	ITEMID_SPECIAL_COOLER,
-} mecha_item_list;
+};
 
-enum {
+enum item_nouse_list {
 	NOUSE_SITTING = 0x01,
-} item_nouse_list;
+};
 
 enum e_item_job {
 	ITEMJ_NORMAL      = 0x01,
@@ -137,7 +138,7 @@ struct item_data {
 	struct script_code *unequip_script;//Script executed once when unequipping.
 	struct {
 		unsigned available : 1;
-		short no_equip;
+		uint32 no_equip;
 		unsigned no_refine : 1;	// [celest]
 		unsigned delay_consume : 1;	// Signifies items that are not consumed immediately upon double-click [Skotlex]
 		unsigned trade_restriction : 9;	//Item restrictions mask [Skotlex]
@@ -196,7 +197,7 @@ struct item_data* itemdb_exists(int nameid);
 #define itemdb_traderight(n) (itemdb_search(n)->flag.trade_restriction)
 #define itemdb_viewid(n) (itemdb_search(n)->view_id)
 #define itemdb_autoequip(n) (itemdb_search(n)->flag.autoequip)
-#define itemdb_is_rune(n) (n >= ITEMID_NAUTHIZ && n <= ITEMID_HAGALAZ)
+#define itemdb_is_rune(n) ((n >= ITEMID_NAUTHIZ && n <= ITEMID_HAGALAZ) || n == ITEMID_LUX_ANIMA)
 #define itemdb_is_element(n) (n >= 990 && n <= 993)
 #define itemdb_is_spellbook(n) (n >= 6188 && n <= 6205)
 #define itemdb_is_poison(n) (n >= 12717 && n <= 12724)

@@ -265,7 +265,7 @@ int merc_hom_calc_skilltree(struct homun_data *hd, int flag_evolve)
 int merc_hom_checkskill(struct homun_data *hd,uint16 skill_id)
 {
 	int i = skill_id - HM_SKILLBASE;
-	if(!hd)
+	if(!hd || !&hd->homunculus)
 		return 0;
 
 	if(hd->homunculus.hskill[i].id == skill_id)
@@ -973,6 +973,8 @@ void merc_hom_revive(struct homun_data *hd, unsigned int hp, unsigned int sp)
 	clif_hominfo(sd,hd,1);
 	clif_hominfo(sd,hd,0);
 	clif_homskillinfoblock(sd);
+	if(hd->homunculus.class_ == 6052) //eleanor
+		sc_start(&hd->bl,&hd->bl, SC_STYLE_CHANGE, 100, MH_MD_FIGHTING, -1);
 }
 
 void merc_reset_stats(struct homun_data *hd)

@@ -81,7 +81,7 @@
 #define MAX_ZENY 1000000000
 #define MAX_FAME 1000000000
 #define MAX_CART 100
-#define MAX_SKILL 3100
+#define MAX_SKILL 5020
 #define GLOBAL_REG_NUM 256   // max permanent character variables per char
 #define ACCOUNT_REG_NUM 64   // max permanent local account variables per account
 #define ACCOUNT_REG2_NUM 16  // max permanent global account variables per account
@@ -128,6 +128,7 @@
 
 #define MAX_FRIENDS 40
 #define MAX_MEMOPOINTS 3
+#define MAX_SKILLCOOLDOWN 20
 
 //Size of the fame list arrays.
 #define MAX_FAME_LIST 10
@@ -246,6 +247,11 @@ struct accreg {
 struct status_change_data {
 	unsigned short type; //SC_type
 	long val1, val2, val3, val4, tick; //Remaining duration.
+};
+
+struct skill_cooldown_data {
+	unsigned short skill_id;
+	long tick;
 };
 
 struct storage_data {
