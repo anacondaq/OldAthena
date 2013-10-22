@@ -1,3 +1,17 @@
+
+--
+-- Table structure for table `skillcooldown`
+--
+
+CREATE TABLE IF NOT EXISTS `skillcooldown` (
+  `account_id` int(11) unsigned NOT NULL,
+  `char_id` int(11) unsigned NOT NULL,
+  `skill` smallint(11) unsigned NOT NULL DEFAULT '0',
+  `tick` int(11) NOT NULL,
+  KEY `account_id` (`account_id`),
+  KEY `char_id` (`char_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
 --
 -- Table structure for table `auction`
 --
@@ -678,5 +692,6 @@ CREATE TABLE IF NOT EXISTS `interreg` (
   `varname` varchar(11) NOT NULL,
   `value` varchar(20) NOT NULL,
    PRIMARY KEY (`varname`)
-) ENGINE=MyISAM;
-INSERT INTO `interreg` (`varname`, `value`) VALUES('unique_id', '0');
+) ENGINE=InnoDB;
+INSERT INTO `interreg` (`varname`, `value`) VALUES
+('unique_id', '0');
